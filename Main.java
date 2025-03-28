@@ -1,7 +1,7 @@
-package Jeu;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         Joueur j1 = new Joueur("Alice");
         Joueur j2 = new Joueur("Bob");
         Joueur j3 = new Joueur("BOB");
@@ -31,5 +31,9 @@ public class Main {
         n1.addPlayer(j1,1,1);
         System.out.println(n1); //test de toString pour Niveau
         System.out.println(j1); //test de toString pour le Joueur dans le Niveau
+        for(int i=0; i<10; i++){
+            n1.setMovement();
+            System.out.println(n1);
+        }
     }
 }

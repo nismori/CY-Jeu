@@ -1,4 +1,4 @@
-package Jeu;
+import java.io.IOException;
 
 /**
  * Programme créant un <b>niveau</b> aleatoirement compose de '#' et de ' '
@@ -57,11 +57,16 @@ public final class Niveau {
         this.joueur = j;
     }
 
+
     public void setCoordonnées(int x, int y) throws PlayerNotHereException {
         if(!isPlayer(x,y))
             throw new PlayerNotHereException("Le joueur n'est pas dans la carte ou est à un endroit inapproprié");
         this.niveau[x][y] = '1';
         this.joueur.addCoordonnées(x,y);
+    }
+
+    public void setClearPlayer(int x, int y){
+        this.niveau[x][y] = ' ';
     }
 
     /**
@@ -73,34 +78,45 @@ public final class Niveau {
         }
     }
 
-
-    /**
-     * En travaux
-     */
-    public enum Commandes{
-        Z,Q,S,D;
+    public char getCaractere() throws IOException{
+        System.out.print("Entrez un caractere : ");
+        int charCode = System.in.read();
+        return Character.toUpperCase((char) charCode);
     }
 
-    public void Deplacement(){
-        Commandes commande;
+    public void setMovement() throws IOException{
+        char caractere = getCaractere();
+        while((caractere != 'Z' && caractere != 'Q') && (caractere != 'S' && caractere != 'D')){
+            if(caractere != '\n')
+                System.out.println("Votre caractère entré, " + caractere + ", n'est pas un des caractères de déplacement Z/Q/S/D.");
+            caractere = getCaractere();
+        }
+        setMovement(caractere);
+    }
+
+
+    public void setMovement(char commande){
         switch(commande){
-        case Z:
-            this.setCoordonnées(joueur.getX(),joueur.getY()+1);
-            break;
-        case Q:
+        case 'Z':
+            this.setClearPlayer(joueur.getX(),joueur.getY());
             this.setCoordonnées(joueur.getX()-1,joueur.getY());
             break;
-        case S:
+        case 'Q':
+            this.setClearPlayer(joueur.getX(),joueur.getY());
             this.setCoordonnées(joueur.getX(),joueur.getY()-1);
             break;
-        case D:
+        case 'S':
+            this.setClearPlayer(joueur.getX(),joueur.getY());
             this.setCoordonnées(joueur.getX()+1,joueur.getY());
+            break;
+        case 'D':
+            this.setClearPlayer(joueur.getX(),joueur.getY());
+            this.setCoordonnées(joueur.getX(),joueur.getY()+1);
             break;
         default:
             break;
         }
     }
-    
 
     /**
      * Affiche le tableau
