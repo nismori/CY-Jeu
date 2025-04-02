@@ -42,7 +42,7 @@ public class Main {
         /**
          * Fonction pour afficher les vielles commandes d'ancien niveau
          */
-        oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
+        //oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
 
         if(args.length != 0){
             String fileName = args[0];
