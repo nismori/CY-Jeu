@@ -22,11 +22,14 @@ public class Main {
         System.out.println();
     }
 
+    @SuppressWarnings("unused")
     public static void main(String[] args) throws IOException{
         Joueur j1 = new Joueur("Alice");
         Joueur j2 = new Joueur("Bob");
         Joueur j3 = new Joueur("BOB");
+        @SuppressWarnings("unused")
         Joueur b = j2;
+        @SuppressWarnings("unused")
         Joueur j4 = new Joueur();
 
         Niveau n1 = new Niveau();
@@ -39,7 +42,7 @@ public class Main {
         /**
          * Fonction pour afficher les vielles commandes d'ancien niveau
          */
-        //oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
+        oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
 
         if(args.length != 0){
             String fileName = args[0];
