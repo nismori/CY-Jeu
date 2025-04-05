@@ -33,7 +33,6 @@ public final class Niveau {
                 this.niveau[i][j] = ' ';
             }
         }
-        this.nbPiece = 4;
         this.niveau[1][18] = '.';
         this.niveau[1][1] = '.';
         this.niveau[8][18] = '.';
@@ -43,7 +42,7 @@ public final class Niveau {
 
     /**
      * Permet de récupérer le Joueur d'un objet Niveau
-     * @return Le Joueur dans le Niveau
+     * @return L'objet Joueur dans le Niveau en paramètre
      */
     public Joueur getJoueur(){
         return this.joueur;
@@ -53,7 +52,7 @@ public final class Niveau {
     /**
      * Permet de récupérer le Niveau d'un objet niveau
      * @param niveau Permet de traiter des cas particuliers comme equals()
-     * @return Le tableau du Niveau
+     * @return Le double tableau du Niveau en paramètre
      */
     public char[][] getNiveau(Niveau niveau){
         return this.niveau;
@@ -75,8 +74,8 @@ public final class Niveau {
 
     
     /**
-     * Vérifie si le niveau n'a plus de pièce. Si c'est le cas, il écrit VICTOIRE et finis le programme.
-     * @return boolean
+     * Vérifie si le niveau n'a plus de pièce. Si c'est le cas, il écrit VICTOIRE et finis le programme
+     * @return S'il n'y a plus de pièce dans le niveau, on renvoie true, sinon on renvoie false
      */
     public boolean isFinish(){
         if(this.nbPiece == 0){
@@ -91,7 +90,7 @@ public final class Niveau {
      * Vérifie si le Joueur '1' peut être placé
      * @param x Coordonnée x
      * @param y Cooronnée y
-     * @return True si c'est le cas
+     * @return true si c'est le cas, false sinon
      */
     public boolean isPlayer(int x, int y){
         if((x>=0 && x<this.niveau.length) && (y>=0 && y<this.niveau[0].length)){
@@ -106,7 +105,7 @@ public final class Niveau {
     /**
      * Génère un booléan à partir d'un entier
      * @param x entier
-     * @return booléen
+     * @return true si x vaut 0, false sinon
      */
     public Boolean Boolean(int x){
         if(x==0){
@@ -143,7 +142,9 @@ public final class Niveau {
 
 
     /**
-     * Si les coordonnées de placement du joueur ne sont pas conforme, on place le joueur sur une case aléatoire. Pour ça on choisit un nombre entre 0 et 19 et si ce dernier est 0, alors on le place sur cette case. Sinon on le place sur la première case disponible à la fin.
+     * Si les coordonnées de placement du joueur ne sont pas conforme, on place le joueur sur une case aléatoire. 
+     * Pour ça on choisit un nombre entre 0 et 19 et si ce dernier est 0, alors on le place sur cette case. 
+     * Sinon on le place sur la première case disponible à la fin
      */
     public void addPlayerDefault(){
         int n = 0; int x = 0; int y = 0;
@@ -179,6 +180,7 @@ public final class Niveau {
 
     /**
      * Le fichier est sauvegardé dans le fichier <i>fileName</i>. Si le nom du fichier essaye d'accéder à des données systèmes, le programme renvoie une erreur
+     * On enregistre le nom, le score puis le niveau dans le fichier
      * @param fileName Chemin absolu du fichier
      */
     public void saveFile(String fileName) {
@@ -193,6 +195,76 @@ public final class Niveau {
             System.out.println("Fichier '" + fileName + "' écrit avec succès !");
         } catch (IOException e) {
             System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Cette fonction récupère le Niveau d'un fichier
+     * On récupère d'abord le Joueur avec son nom et son score dans les deux premières lignes
+     * Puis le Niveau qui prend le reste du fichier
+     * On déduit le nombre de pièces à récupérer avec le nombre de pièces restantes dans le Niveau. S'il n'y en a plus, on les remet toutes
+     * Si on a une erreur, on créé un niveau par défaut
+     * @param fileName Chemin absolu du fichier
+     */
+    public void loadFile(String fileName) {
+        Path filePath = Paths.get(fileName);
+        Joueur joueur_default = new Joueur("Bob");
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            
+            if (lines.isEmpty()) {
+                throw new IOException(fileName);
+            }
+
+            String name = lines.get(0); 
+            int score = Integer.valueOf(lines.get(1));
+    
+            List<String> remainingLines = lines.subList(2, lines.size());
+            
+            int rows = remainingLines.size()-1;
+            int cols = remainingLines.get(0).length();
+            char[][] niveau = new char[rows][cols];
+            
+            for (int i = 0; i < rows; i++) {
+                String line = remainingLines.get(i);
+                for (int j = 0; j < line.length(); j++) {
+                    niveau[i][j] = line.charAt(j);
+                }
+            }
+    
+            this.niveau = niveau;
+
+            Joueur j = new Joueur(name); //Le mot clé final empêche toute modification du nom du joueur actuel
+            this.joueur = j;
+            this.joueur.addScore(score);
+            this.setCoordonneeWithFile();
+
+            if (this.isNiveauExist()) {
+                int compteur = this.numberOfPieces();
+                System.out.println(compteur);
+                if(compteur>0){
+                    this.nbPiece = compteur;
+                }
+                else{
+                    this.niveau[1][18] = '.';
+                    this.niveau[1][1] = '.';
+                    this.niveau[8][18] = '.';
+                    this.niveau[8][1] = '.';
+                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '.'){
+                        this.joueur.addScore(1);
+                        this.nbPiece--;
+                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
+                    }
+                }
+            } 
+            else{
+                throw new IOException(fileName);
+            }
+        }
+        catch (IOException e) {
+            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage() + ". Un niveau par défaut a été créé");
+            this.addPlayer(joueur_default,1,2);
         }
     }
 
@@ -213,6 +285,10 @@ public final class Niveau {
     }
 
 
+    /**
+     * Compte le nombre de pièces contenu dans le niveau
+     * @return Nombre de pièces dans le niveau
+     */
     public int numberOfPieces(){
         int compteur = 0;
         char[][] tab = this.niveau;
@@ -228,79 +304,8 @@ public final class Niveau {
 
 
     /**
-     * Cette fonction récupère le Niveau d'un fichier en y retirant le Joueur qui y était auparavant.
-     * En tenant compte que le fichier texte puisse être modifié par l'utilisateur des contraintes ont été rajoutés pour que le fichier chargé soit conforme (cf fonction isNiveauExist())
-     * Si le fichier texte est vide, le niveau chargé n'est pas conforme ou le chemin du fichier n'est pas bon, un Niveau par défaut est créé (cf déclaration de l'objet Niveau)
-     * @param fileName Chemin absolu du fichier
-     * @return Un Niveau conforme sans joueur 
-     */
-    public Niveau loadFile(String fileName) {
-        Path filePath = Paths.get(fileName);
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            
-            if (lines.isEmpty()) {
-                System.out.println("Le niveau n'est pas fonctionnel. Un niveau par défaut a été créé");
-                return new Niveau();
-            }
-
-            String name = lines.get(0); 
-            int score = Integer.valueOf(lines.get(1));
-    
-            List<String> remainingLines = lines.subList(2, lines.size());
-            
-            int rows = remainingLines.size()-1;
-            int cols = remainingLines.get(0).length();
-            char[][] niveau = new char[rows][cols];
-            
-            for (int i = 0; i < rows; i++) {
-                String line = remainingLines.get(i);
-                for (int j = 0; j < line.length(); j++) {
-                    niveau[i][j] = line.charAt(j);
-                }
-            }
-    
-            Niveau n = new Niveau(); //Devoir assigner un joueur au niveau oblige la création d'un nouveau niveau dans l'état de class Niveau actuelle
-            n.niveau = niveau;
-
-            Joueur joueur = new Joueur(name);
-            joueur.addScore(score);
-            n.joueur = joueur;
-            n.setCoordonneeWithFile();
-
-            if (n.isNiveauExist()) {
-                int compteur = n.numberOfPieces();
-                if(compteur>0){
-                    nbPiece -= compteur;
-                }
-                else{
-                    n.niveau[1][18] = '.';
-                    n.niveau[1][1] = '.';
-                    n.niveau[8][18] = '.';
-                    n.niveau[8][1] = '.';
-                    if(n.niveau[n.getJoueur().getX()][n.getJoueur().getY()] == '.'){
-                        n.joueur.addScore(1);
-                        n.niveau[n.getJoueur().getX()][n.getJoueur().getY()] = '1';
-                    }
-                }
-                return n;
-            } 
-            else {
-                System.out.println("Le niveau n'est pas fonctionnel. Un niveau par défaut a été créé");
-                return new Niveau();
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage() + ". Un niveau par défaut a été créé");
-            Niveau niveau = new Niveau();
-            return niveau;
-        }
-    }
-
-
-    /**
      * Vérifie si le Niveau est conforme
-     * @return Si c'est le cas, on retourne True
+     * @return Si c'est le cas, on retourne true
      */
     public boolean isNiveauExist(){
         if(this.niveau.length > 0 && this.niveau[0].length > 0){

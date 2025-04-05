@@ -33,7 +33,6 @@ public class Main {
         Niveau n1 = new Niveau();
         n1.addPlayer(j1, 1, 1); 
         Niveau n2 = new Niveau();
-        Niveau n3 = n2.loadFile("niveauBob.txt");
 
         /**
          * Fonction pour afficher les vielles commandes d'ancien niveau
@@ -42,15 +41,15 @@ public class Main {
 
         if(args.length != 0){
             String fileName = args[0];
-            Niveau n4 = n1.loadFile(fileName);
-            System.out.println(n4);
-            System.out.println("Fichier '" + fileName + "' chargé avec succès");
+            n2.loadFile(fileName);
+            System.out.println(n2);
+            System.out.println("Fichier '" + fileName + "' chargé avec succès depuis la commande 'java -jar Main.jar niveauBob.txt'");
             System.out.println();
         }
-        Deplacement d = new Deplacement(n3);
+        Deplacement d = new Deplacement(n2);
         d.Movement(50);
-        System.out.println(n3);
-        n3.saveFile("niveau"+n3.getJoueur().getName()+".txt"); //On ne sauvegarde plus après la fin de partie, mais ce n'est pas demandé. On peut toujours sauvegarder en épuisant les déplacements.
+        System.out.println(n2);
+        n2.saveFile("niveau"+n2.getJoueur().getName()+".txt");
         System.out.println();
     }
 }

@@ -1,3 +1,3 @@
-- Ajout de 4 pièces au 4 coins (Monde 3 Niveau 1)
-- Si le joueur apparait sur une pièce, le programme en tient compte et lui ajoute au score
-- Quand les 4 pièces sont récupérés, le programme s'arrête en écrivant "VICTOIRE"
+- Le joueur et le score sont désormais inclus dans la sauvegarde du Niveau
+- addScore était une méthode dont le rôle était censé être joué par setScore. Suppression de setScore pour le remplacer par addScore
+- Amélioration des @return dans Niveau
