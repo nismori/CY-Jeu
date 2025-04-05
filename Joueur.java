@@ -102,6 +102,15 @@ public final class Joueur{
 
 
     /**
+     * Met la coordonnee x au Joueur
+     * @param x Coordonnee x
+     */
+    public void setX(int x){
+        this.x = x;
+    }
+
+
+    /**
      * Récupère la valeur de y du Joueur et la renvoie
      * @return Valeur de y
      */
@@ -109,21 +118,23 @@ public final class Joueur{
         return this.y;
     }
 
+    /**
+     * Met la coordonnée y au Joueur
+     * @param y Coordonnée y
+     */
+    public void setY(int y){
+        this.y = y;
+    }
+
 
     /** 
      * Ajouter newScore au score du Joueur puis vérifie si ce dernier est positif ou nul
      * @param newScore Score à ajouter ou retirer du score du Joueur
      */
-    public void setScore(int newScore){
+    public void addScore(int newScore){
         this.score += newScore;
         if(this.score < 0){
             this.score = 0;
         }
-    }
-
-
-    public void addScore(int x){
-        if(x > 0)
-            this.score += x;      
     }
 }

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Random;
 
@@ -32,6 +33,7 @@ public final class Niveau {
                 this.niveau[i][j] = ' ';
             }
         }
+        this.nbPiece = 4;
         this.niveau[1][18] = '.';
         this.niveau[1][1] = '.';
         this.niveau[8][18] = '.';
@@ -146,7 +148,7 @@ public final class Niveau {
     public void addPlayerDefault(){
         int n = 0; int x = 0; int y = 0;
         for(int i=0; i<this.niveau.length; i++){
-            for(int j=0; j<this.niveau.length; j++){
+            for(int j=0; j<this.niveau[0].length; j++){
                 if(this.niveau[i][j] == ' '){
                     if(n == 0){
                         x = i;
@@ -183,11 +185,45 @@ public final class Niveau {
         Path filePath = Paths.get(fileName);
         try {
             String n = this.toString();
-            Files.write(filePath,List.of(n));
+            String nom = this.joueur.getName();
+            String score = String.valueOf(this.joueur.getScore());
+            Files.write(filePath, List.of(nom), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(filePath,List.of(score), StandardOpenOption.APPEND);
+            Files.write(filePath,List.of(n), StandardOpenOption.APPEND);
             System.out.println("Fichier '" + fileName + "' écrit avec succès !");
         } catch (IOException e) {
             System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
         }
+    }
+
+
+    /**
+     * Trouve le Joueur '1' dans le Niveau et donne les coordonnées x,y au Joueur
+     */
+    public void setCoordonneeWithFile(){
+        char[][] tab = this.niveau;
+        for(int i=0; i<tab.length; i++){
+            for(int j=0; j<tab[0].length; j++){
+                if(tab[i][j] == '1'){
+                    this.joueur.setX(i);
+                    this.joueur.setY(j);
+                }
+            }
+        }
+    }
+
+
+    public int numberOfPieces(){
+        int compteur = 0;
+        char[][] tab = this.niveau;
+        for(int i=0; i<tab.length; i++){
+            for(int j=0; j<tab[0].length; j++){
+                if(tab[i][j] == '.'){
+                    compteur++;
+                }
+            }
+        }
+        return compteur;
     }
 
 
@@ -202,31 +238,54 @@ public final class Niveau {
         Path filePath = Paths.get(fileName);
         try {
             List<String> lines = Files.readAllLines(filePath);
-            int rows,cols = 0;
-            if(lines.isEmpty()){
+            
+            if (lines.isEmpty()) {
                 System.out.println("Le niveau n'est pas fonctionnel. Un niveau par défaut a été créé");
                 return new Niveau();
             }
-            rows = lines.size();
-            cols = lines.get(0).length();
-            char[][] niveau = new char[rows-1][cols];
-            for (int i=0; i<rows-1; i++){
-                String line = lines.get(i);
-                for(int j=0; j<line.length(); j++){
+
+            String name = lines.get(0); 
+            int score = Integer.valueOf(lines.get(1));
+    
+            List<String> remainingLines = lines.subList(2, lines.size());
+            
+            int rows = remainingLines.size()-1;
+            int cols = remainingLines.get(0).length();
+            char[][] niveau = new char[rows][cols];
+            
+            for (int i = 0; i < rows; i++) {
+                String line = remainingLines.get(i);
+                for (int j = 0; j < line.length(); j++) {
                     niveau[i][j] = line.charAt(j);
                 }
             }
-            Niveau n = new Niveau();
+    
+            Niveau n = new Niveau(); //Devoir assigner un joueur au niveau oblige la création d'un nouveau niveau dans l'état de class Niveau actuelle
             n.niveau = niveau;
-            n.remove();
-            n.niveau[1][18] = '.';
-            n.niveau[1][1] = '.';
-            n.niveau[8][18] = '.';
-            n.niveau[8][1] = '.';
-            if(n.isNiveauExist()){
+
+            Joueur joueur = new Joueur(name);
+            joueur.addScore(score);
+            n.joueur = joueur;
+            n.setCoordonneeWithFile();
+
+            if (n.isNiveauExist()) {
+                int compteur = n.numberOfPieces();
+                if(compteur>0){
+                    nbPiece -= compteur;
+                }
+                else{
+                    n.niveau[1][18] = '.';
+                    n.niveau[1][1] = '.';
+                    n.niveau[8][18] = '.';
+                    n.niveau[8][1] = '.';
+                    if(n.niveau[n.getJoueur().getX()][n.getJoueur().getY()] == '.'){
+                        n.joueur.addScore(1);
+                        n.niveau[n.getJoueur().getX()][n.getJoueur().getY()] = '1';
+                    }
+                }
                 return n;
-            }
-            else{
+            } 
+            else {
                 System.out.println("Le niveau n'est pas fonctionnel. Un niveau par défaut a été créé");
                 return new Niveau();
             }
@@ -235,20 +294,6 @@ public final class Niveau {
             System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage() + ". Un niveau par défaut a été créé");
             Niveau niveau = new Niveau();
             return niveau;
-        }
-    }
-
-
-    /**
-     * Retire le joueur et la pièce du Niveau
-     */
-    public void remove(){
-        for(int i=0; i<this.niveau.length; i++){
-            for(int j=0; j<this.niveau[0].length; j++){
-                if(this.niveau[i][j] == '1' || this.niveau[i][j] == '.'){
-                    this.niveau[i][j] = ' ';
-                }
-            }
         }
     }
 

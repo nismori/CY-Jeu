@@ -27,17 +27,13 @@ public class Main {
         Joueur j1 = new Joueur("Alice");
         Joueur j2 = new Joueur("Bob");
         Joueur j3 = new Joueur("BOB");
-        @SuppressWarnings("unused")
         Joueur b = j2;
-        @SuppressWarnings("unused")
         Joueur j4 = new Joueur();
 
         Niveau n1 = new Niveau();
         n1.addPlayer(j1, 1, 1); 
         Niveau n2 = new Niveau();
-        Niveau n3 = n1.loadFile("niveauBob.txt");
-        n3.addPlayer(j2, 1, 2);
-        System.out.println(n3);
+        Niveau n3 = n2.loadFile("niveauBob.txt");
 
         /**
          * Fonction pour afficher les vielles commandes d'ancien niveau
@@ -47,7 +43,6 @@ public class Main {
         if(args.length != 0){
             String fileName = args[0];
             Niveau n4 = n1.loadFile(fileName);
-            n4.addPlayer(j3, 5, 10);
             System.out.println(n4);
             System.out.println("Fichier '" + fileName + "' chargé avec succès");
             System.out.println();
