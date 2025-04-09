@@ -1,3 +1,7 @@
-- Le joueur et le score sont désormais inclus dans la sauvegarde du Niveau
-- addScore était une méthode dont le rôle était censé être joué par setScore. Suppression de setScore pour le remplacer par addScore
-- Amélioration des @return dans Niveau
+- Ajout des pièges:
+    - Le Joueur a 3 vies. Il perd une vie si il touche un piège et reviens à sa position de départ lors du lancement du programme.
+    - Le nombre de vie est sauvegardé lors de la sauvegarde du niveau. Quand le Joueur n'a plus de vie, le Niveau, le score et le nombre de vies sont rénitialisés
+- Moins de texte : 
+    - Plus de notifications que le fichier est bien enregistré. On ne laisse que les erreurs. Le code reste en commentaire
+- Argument de la commande -jar
+    - Lors de la commande 'java -jar Main.jar fichier', le Niveau est chargé et sauvegardé sur ce nom de fichier avec son propre nombre de vie et score. Le nom reste toujours Bob cependant.

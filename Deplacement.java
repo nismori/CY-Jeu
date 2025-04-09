@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Classe permettant de déplacer le <b>joueur</b> dans le <b>niveau</b>
+ * Classe permettant de déplacer le <b>Joueur</b> dans le <b>Niveau</b>
  * @author Victor
  */
 public class Deplacement {
@@ -12,8 +12,8 @@ public class Deplacement {
     private int y = -1;
 
     /**
-     * Le déplacement est créé en fonction des limites du niveau.
-     * @param niveau Récupère le niveau avec son joueur et ses coordonnées
+     * Le déplacement est créé en fonction des limites du Niveau.
+     * @param niveau Récupère le Niveau avec son Joueur et ses coordonnées
      * Puis on créé x et y pour gagner du temps lors de leurs appels dans les fonctions qui viennent
      */
     public Deplacement(Niveau niveau){
@@ -60,7 +60,7 @@ public class Deplacement {
 
 
     /**
-     * Récupère un caractère avec <i>getCaractere</i> et l'envoie à Movement qui va l'interpréter
+     * Récupère un caractère avec <i>getCaractere</i> et l'envoie à Movement(char commande) qui va l'interpréter
      * @throws IOException En cas de problème de lecture du caractère
      */
     public void Movement() throws IOException{
@@ -77,7 +77,8 @@ public class Deplacement {
     /**
      * En fonction de commande, fait avancer le Joueur en le supprimant de son ancienne coordonnée et en ajoutant la nouvelle
      * Si le Joueur va dépasser les limites de la carte, on ne le "déplace" pas
-     * On récupère la pièce sur la case où on se déplace
+     * On récupère la pièce sur la case où se déplace le Joueur
+     * On renvoie le Joueur à sa position par défaut s'il tombe sur un piège, calculée lors du lancement du programme. On lui fait aussi perdre une vie
      * @param commande un caractère parmi {'Z','Q','S','D'}
      */
     public void Movement(char commande){
@@ -88,7 +89,7 @@ public class Deplacement {
                 this.n.getPiege(x-1, y);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x-1,y)){
-                    this.n.getNiveau(n)[x-1][y] = ' ';
+                    //this.n.getNiveau(n)[x-1][y] = ' ';  //Permet de faire disparaitre les pièges apprait être tombé dessus. Par défaut, ils ne disparaissent pas
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -101,7 +102,7 @@ public class Deplacement {
                 this.n.getPiege(x,y-1);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x,y-1)){
-                    this.n.getNiveau(n)[x][y-1] = ' ';
+                    //this.n.getNiveau(n)[x][y-1] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -114,7 +115,7 @@ public class Deplacement {
                 this.n.getPiege(x+1, y);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x+1,y)){
-                    this.n.getNiveau(n)[x+1][y] = ' ';
+                    //this.n.getNiveau(n)[x+1][y] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -127,7 +128,7 @@ public class Deplacement {
                 this.n.getPiege(x,y+1);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x,y+1)){
-                    this.n.getNiveau(n)[x][y+1] = ' ';
+                    //this.n.getNiveau(n)[x][y+1] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -145,18 +146,26 @@ public class Deplacement {
      * @param x Nombre de fois que le joueur se déplace
      * @throws IOException En cas de problème de lecture du caractère
      * S'il n'y a plus de pièce, on arrête le jeu
+     * Si le joueur n'a plus de vie, on arrête aussi le jeu
+     * On sauvegarde le niveau dans un fichier texte correspondant au nom du fichier en argument. Sinon on considère que le Joueur ne veut joueur qu'une partie et on ne sauvegarde pas
      */
-    public void Movement(int x) throws IOException{
+    public void Movement(int x, String fileName) throws IOException{
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
             if(this.n.isFinishPiece()){
-                this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
+                if(fileName != null)
+                    this.n.saveFile(fileName);
+                //else
+                    //this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
                 System.out.println("VICTOIRE");
                 System.exit(0);
             }
             if(this.n.isFinishPiege()){
-                this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
+                if(fileName != null)
+                    this.n.saveFile(fileName);
+                //else
+                    //this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
                 System.out.println("GAME OVER");
                 System.exit(0);
             }

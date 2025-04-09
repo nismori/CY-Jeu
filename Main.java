@@ -22,8 +22,11 @@ public class Main {
         System.out.println();
     }
 
+
+
     @SuppressWarnings("unused")
     public static void main(String[] args) throws IOException{
+        String fileName = null;
         Joueur j1 = new Joueur("Alice");
         Joueur j2 = new Joueur("Bob");
         Joueur j3 = new Joueur("BOB");
@@ -40,19 +43,16 @@ public class Main {
         //oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
 
         if(args.length != 0){
-            String fileName = args[0];
+            fileName = args[0];
             n2.loadFile(fileName);
-            System.out.println(n2);
-            System.out.println("Fichier '" + fileName + "' chargé avec succès depuis la commande 'java -jar Main.jar niveauBob.txt'");
-            System.out.println();
         }
-        else{
+        else
             n2.addPlayer(j2, 1, 1);
-        }
+
+            
         Deplacement d = new Deplacement(n2);
-        d.Movement(500);
-        System.out.println(n2);
-        n2.saveFile("niveau"+n2.getJoueur().getName()+".txt");
-        System.out.println();
+        d.Movement(1000,fileName);
+        System.out.println("ERROR ou vous êtes trèèèèèèès nul");
+        System.exit(0);
     }
 }

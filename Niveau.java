@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Classe créant un <b>Niveau</b> aleatoirement compose de '#' et de ' ' ainsi qu'un <b>Joueur</b> '1' et de <i>pièces</i> '.'
- * @author Victor
+ * Classe créant un <b>Niveau</b> aleatoirement compose de <i>mur</i> '#', de <i>vide</i> ' ', de <i>pièces</i> '.' de <i>pièges</i> '*' ainsi qu'un <b>Joueur</b> '1'
  */
 public final class Niveau {
     private char[][] niveau;
@@ -16,7 +15,7 @@ public final class Niveau {
     private int nbPiece = 4;
 
     /**
-     * Assigner les valeurs '#' et ' ' au tableau
+     * Assigner les valeurs '#', ' ', '.' et '*' au tableau
      */
     public Niveau(){
         this.niveau = new char[10][20];
@@ -39,13 +38,9 @@ public final class Niveau {
         this.niveau[8][1] = '.';
 
         this.niveau[2][18] = '*';
-        this.niveau[1][17] = '*';
         this.niveau[1][2] = '*';
-        this.niveau[2][1] = '*';
-        this.niveau[7][18] = '*';
         this.niveau[8][17] = '*';
         this.niveau[8][2] = '*';
-        this.niveau[7][1] = '*';
     }
 
 
@@ -83,7 +78,7 @@ public final class Niveau {
 
 
     /**
-     * Récupère le piège en retirant une vie au joueur
+     * Retire une vie au joueur s'il tombe sur un piège
      * @param x coordonnée x
      * @param y coordonnée y
      */
@@ -93,7 +88,12 @@ public final class Niveau {
         }
     } 
 
-
+    /**
+     * Vérifie si la case est un piège
+     * @param x coordonnée x
+     * @param y coordonnée y
+     * @return true si la case est un piège, false sinon
+     */
     public boolean isPiege(int x, int y){
         if(this.niveau[x][y] == '*')
             return true;
@@ -134,7 +134,7 @@ public final class Niveau {
      */
     public boolean isPlayer(int x, int y){
         if((x>=0 && x<this.niveau.length) && (y>=0 && y<this.niveau[0].length)){
-            if(this.niveau[x][y] != '#'){
+            if(this.niveau[x][y] != '#'){   
                 return true;
             }
         }
@@ -160,7 +160,8 @@ public final class Niveau {
     /**
      * On vérifie si le Joueur peut être placé, puis on le place dans le Niveau aux coordonnées indiqués
      * Si le Joueur ne peut pas être placé, on le place sur le premier vide d'un parcours en boucle avec addPlayerDefault()
-     * On vérifie aussi s'il y a une pièce à l'endroit où on place le pièce et on l'ajoute au score si c'est le cas
+     * On vérifie aussi s'il y a une pièce à l'endroit où on place le Joueur et on l'ajoute au score si c'est le cas
+     * Idem pour les pièges avec la vie
      * @param j Joueur provenant de la classe joueur
      * @param x coordonnée x
      * @param y coordonnée y
@@ -225,7 +226,7 @@ public final class Niveau {
 
     /**
      * Le fichier est sauvegardé dans le fichier <i>fileName</i>. Si le nom du fichier essaye d'accéder à des données systèmes, le programme renvoie une erreur
-     * On enregistre le nom, le score puis le niveau dans le fichier
+     * On enregistre le nom, le score et le nombre de vie du Joueur puis le Niveau dans le fichier
      * @param fileName Chemin absolu du fichier
      */
     public void saveFile(String fileName) {
@@ -239,7 +240,7 @@ public final class Niveau {
             Files.write(filePath,List.of(score), StandardOpenOption.APPEND);
             Files.write(filePath,List.of(life), StandardOpenOption.APPEND);
             Files.write(filePath,List.of(n), StandardOpenOption.APPEND);
-            System.out.println("Fichier '" + fileName + "' écrit avec succès !");
+            //System.out.println("Fichier '" + fileName + "' écrit avec succès !");
         } catch (IOException e) {
             System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
         }
@@ -248,9 +249,10 @@ public final class Niveau {
 
     /**
      * Cette fonction récupère le Niveau d'un fichier
-     * On récupère d'abord le Joueur avec son nom et son score dans les deux premières lignes
+     * On récupère d'abord le Joueur avec son nom, son score et sa vie dans les trois premières lignes
      * Puis le Niveau qui prend le reste du fichier
      * On déduit le nombre de pièces à récupérer avec le nombre de pièces restantes dans le Niveau. S'il n'y en a plus, on les remet toutes
+     * Si le joueur n'a plus de vies, on créé un niveau par défaut avec 3 vies
      * Si on a une erreur, on créé un niveau par défaut
      * @param fileName Chemin absolu du fichier
      */
@@ -280,17 +282,21 @@ public final class Niveau {
                     niveau[i][j] = line.charAt(j);
                 }
             }
-    
+
+            if(life == 0){
+                throw new IOException("Le joueur n'a plus de vies. ");
+            }
+
             this.niveau = niveau;
 
             Joueur j = new Joueur(name); //Le mot clé final empêche toute modification du nom du joueur actuel
             this.joueur = j;
             this.joueur.addScore(score);
+            this.joueur.setLife(life);
             this.setCoordonneeWithFile();
 
             if (this.isNiveauExist()) {
                 int compteur = this.numberOfPieces();
-                System.out.println(compteur);
                 if(compteur>0){
                     this.nbPiece = compteur;
                 }
@@ -301,13 +307,9 @@ public final class Niveau {
                     this.niveau[8][1] = '.';
 
                     this.niveau[2][18] = '*';
-                    this.niveau[1][17] = '*';
                     this.niveau[1][2] = '*';
-                    this.niveau[2][1] = '*';
-                    this.niveau[7][18] = '*';
                     this.niveau[8][17] = '*';
                     this.niveau[8][2] = '*';
-                    this.niveau[7][1] = '*';
 
                     if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '.'){
                         this.joueur.addScore(1);
@@ -321,12 +323,13 @@ public final class Niveau {
                 }
             } 
             else{
+                
                 throw new IOException(fileName);
             }
         }
         catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage() + ". Un niveau par défaut a été créé");
-            this.addPlayer(joueur_default,1,2);
+            System.err.println("Le fichier " + e.getMessage() + " est vide ou n'existe pas. Un niveau par défaut a été créé");
+            this.addPlayer(joueur_default,5,5);
         }
     }
 

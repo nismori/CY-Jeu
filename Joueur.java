@@ -144,16 +144,28 @@ public final class Joueur{
         }
     }
 
+
+    /**
+     * Récupère le nombre de vie du Joueur et la renvoie
+     * @return Nombre de vies
+     */
     public int getLife(){
         return this.life;
     }
 
 
+    /**
+     * Retire x vie(s) au Joueur
+     */
     public void removeLife(int x){
         this.life -= x;
     }
 
 
+    /**
+     * Met x vie(s) au Joueur
+     * @param x Nombre de vies
+     */
     public void setLife(int x){
         this.life = x;
     }
@@ -162,7 +174,7 @@ public final class Joueur{
 
 
     /**
-     * Affiche le nom, le score et les coordonnées x et y sous la forme nom : score pts ; Coordonnees : (x,y) 
+     * Affiche le nom, le score, le nombre de vie(s) et les coordonnées x et y sous la forme nom : <i>score<i> pts ; Nombre de vies : <i>life<i> vie(s) Coordonnees : <i>(x,y)</i 
      */
     public String toString(){
        String point = (this.score > 1) ? " pts" : " pt";
