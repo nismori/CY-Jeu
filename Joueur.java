@@ -126,6 +126,8 @@ public final class Joueur{
 
     /**
      * Met les coordonnées x et y par défaut au Joueur
+     * @param x Coordonnée x
+     * @param y Coordonnée y
      */
     public void setDefaultXandY(int x, int y){
         this.default_x = x;
@@ -156,6 +158,7 @@ public final class Joueur{
 
     /**
      * Retire x vie(s) au Joueur
+     * @param x Nombre de vies 
      */
     public void removeLife(int x){
         this.life -= x;
@@ -170,11 +173,9 @@ public final class Joueur{
         this.life = x;
     }
 
-    
-
 
     /**
-     * Affiche le nom, le score, le nombre de vie(s) et les coordonnées x et y sous la forme nom : <i>score<i> pts ; Nombre de vies : <i>life<i> vie(s) Coordonnees : <i>(x,y)</i 
+     * Affiche le nom, le score, le nombre de vie(s) et les coordonnées x et y sous la forme nom : <i>score</i> pts ; Nombre de vies : <i>life</i> vie(s) Coordonnees : <i>(x,y)</i> 
      */
     public String toString(){
        String point = (this.score > 1) ? " pts" : " pt";

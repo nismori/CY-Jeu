@@ -253,7 +253,7 @@ public final class Niveau {
      * Puis le Niveau qui prend le reste du fichier
      * On déduit le nombre de pièces à récupérer avec le nombre de pièces restantes dans le Niveau. S'il n'y en a plus, on les remet toutes
      * Si le joueur n'a plus de vies, on créé un niveau par défaut avec 3 vies
-     * Si on a une erreur, on créé un niveau par défaut
+     * Si on a une erreur, on créé un niveau par défaut. Il y a des erreurs personnalisés en fonction de l'erreur
      * @param fileName Chemin absolu du fichier
      */
     public void loadFile(String fileName) {
@@ -263,7 +263,7 @@ public final class Niveau {
             List<String> lines = Files.readAllLines(filePath);
             
             if (lines.isEmpty()) {
-                throw new IOException(fileName);
+                throw new IOException();
             }
 
             String name = lines.get(0); 
@@ -284,7 +284,7 @@ public final class Niveau {
             }
 
             if(life == 0){
-                throw new IOException("Le joueur n'a plus de vies. ");
+                throw new IllegalStateException();
             }
 
             this.niveau = niveau;
@@ -324,11 +324,15 @@ public final class Niveau {
             } 
             else{
                 
-                throw new IOException(fileName);
+                throw new IOException();
             }
         }
         catch (IOException e) {
-            System.err.println("Le fichier " + e.getMessage() + " est vide ou n'existe pas. Un niveau par défaut a été créé");
+            System.err.println("Le fichier " + fileName + " est vide ou corrompu. Un niveau par défaut a été créé.");
+            this.addPlayer(joueur_default,5,5);
+        }
+        catch (IllegalStateException e){
+            System.err.println("Le joueur n'a plus de vies. Un niveau par défaut a été créé.");
             this.addPlayer(joueur_default,5,5);
         }
     }

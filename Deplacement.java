@@ -144,6 +144,7 @@ public class Deplacement {
     /**
      * Permet de déplacer le Joueur x fois dans le Niveau. 
      * @param x Nombre de fois que le joueur se déplace
+     * @param fileName Nom du fichier en argument
      * @throws IOException En cas de problème de lecture du caractère
      * S'il n'y a plus de pièce, on arrête le jeu
      * Si le joueur n'a plus de vie, on arrête aussi le jeu
