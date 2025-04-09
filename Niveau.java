@@ -37,6 +37,15 @@ public final class Niveau {
         this.niveau[1][1] = '.';
         this.niveau[8][18] = '.';
         this.niveau[8][1] = '.';
+
+        this.niveau[2][18] = '*';
+        this.niveau[1][17] = '*';
+        this.niveau[1][2] = '*';
+        this.niveau[2][1] = '*';
+        this.niveau[7][18] = '*';
+        this.niveau[8][17] = '*';
+        this.niveau[8][2] = '*';
+        this.niveau[7][1] = '*';
     }
 
 
@@ -72,13 +81,46 @@ public final class Niveau {
         }
     } 
 
+
+    /**
+     * Récupère le piège en retirant une vie au joueur
+     * @param x coordonnée x
+     * @param y coordonnée y
+     */
+    public void getPiege(int x, int y){
+        if(this.niveau[x][y] == '*'){
+            this.joueur.setLife(1);
+            this.joueur.setX(this.joueur.getDefaultX());
+            this.joueur.setY(this.joueur.getDefaultY());
+        }
+    } 
+
+
+    public boolean isPiege(int x, int y){
+        if(this.niveau[x][y] == '*')
+            return true;
+        return false;
+    }
+
     
     /**
      * Vérifie si le niveau n'a plus de pièce. Si c'est le cas, il écrit VICTOIRE et finis le programme
      * @return S'il n'y a plus de pièce dans le niveau, on renvoie true, sinon on renvoie false
      */
-    public boolean isFinish(){
+    public boolean isFinishPiece(){
         if(this.nbPiece == 0){
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Vérifie si le joueur n'a plus de vies. Si c'est le cas, il écrit GAME OVER et finis le programme
+     * @return Si le joueur n'a plus de vies, on renvoie true, sinon on renvoie false
+     */
+    public boolean isFinishPiege(){
+        if(this.joueur.getLife() == 0){
             return true;
         }
         return false;
@@ -132,6 +174,8 @@ public final class Niveau {
             this.joueur = j;
             this.joueur.addCoordonnees(x,y);
             this.getPiece(x,y);
+            this.getPiege(x,y);
+            this.joueur.setDefaultXandY(x,y);
             this.niveau[x][y] = '1';
         } 
         catch(Exception e){
@@ -161,7 +205,9 @@ public final class Niveau {
                     Boolean bool = Boolean(random_number); 
                     if(!bool){
                         this.joueur.addCoordonnees(i, j);
-                        this.getPiece(i, j);
+                        this.getPiece(i,j);
+                        this.getPiege(i,j);
+                        this.joueur.setDefaultXandY(x,y);
                         this.niveau[i][j] = '1';
                         return;
                     }
@@ -169,8 +215,9 @@ public final class Niveau {
             }
         }
         if(n==1){
-            if(this.niveau[x][y] == '.')
-                this.joueur.addScore(1);
+            this.getPiece(x, y);
+            this.getPiege(x, y);
+            this.joueur.setDefaultXandY(x,y);
             this.joueur.addCoordonnees(x, y);
             this.niveau[x][y] = '1';
             return;
@@ -251,9 +298,23 @@ public final class Niveau {
                     this.niveau[1][1] = '.';
                     this.niveau[8][18] = '.';
                     this.niveau[8][1] = '.';
+
+                    this.niveau[2][18] = '*';
+                    this.niveau[1][17] = '*';
+                    this.niveau[1][2] = '*';
+                    this.niveau[2][1] = '*';
+                    this.niveau[7][18] = '*';
+                    this.niveau[8][17] = '*';
+                    this.niveau[8][2] = '*';
+                    this.niveau[7][1] = '*';
+
                     if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '.'){
                         this.joueur.addScore(1);
                         this.nbPiece--;
+                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
+                    }
+                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '*'){
+                        this.joueur.setLife(1);
                         this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
                     }
                 }
@@ -279,6 +340,7 @@ public final class Niveau {
                 if(tab[i][j] == '1'){
                     this.joueur.setX(i);
                     this.joueur.setY(j);
+                    this.joueur.setDefaultXandY(i,j);
                 }
             }
         }
@@ -290,6 +352,24 @@ public final class Niveau {
      * @return Nombre de pièces dans le niveau
      */
     public int numberOfPieces(){
+        int compteur = 0;
+        char[][] tab = this.niveau;
+        for(int i=0; i<tab.length; i++){
+            for(int j=0; j<tab[0].length; j++){
+                if(tab[i][j] == '.'){
+                    compteur++;
+                }
+            }
+        }
+        return compteur;
+    }
+
+
+    /**
+     * Compte le nombre de pièges contenu dans le niveau
+     * @return Nombre de pièces dans le niveau
+     */
+    public int numberOfPieges(){
         int compteur = 0;
         char[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){

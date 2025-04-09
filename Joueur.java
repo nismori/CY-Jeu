@@ -6,8 +6,11 @@ public final class Joueur{
     private final String name; 
     private int score;
     private static int N = 0;
-    private int x = -1;
+    private int x = -1;;
     private int y = -1;
+    private int default_x = -1;
+    private int default_y = -1;
+    private int life = 3;
     
     /**
      * Créé un <b>Joueur</b> avec un nom et un score
@@ -55,31 +58,7 @@ public final class Joueur{
     }
 
 
-    /**
-     * Affiche le nom, le score et les coordonnées x et y sous la forme nom : score pts ; Coordonnees : (x,y) 
-     */
-    public String toString(){
-       String point = (this.score > 1) ? " pts" : " pt";
-       return (this.getName() + " : " + this.getScore() + point + " ; Coordonnees : (" + this.x + "," + this.y + ")");
-    }
-
-
-    /**
-     * Vérifie l'égalité entre deux Joueur en vérifiant si les deux noms sont identiques
-     * @param joueur Joueur à comparer
-     */
-    public boolean equals(Object joueur){
-        if(joueur instanceof Joueur){
-            Joueur j = (Joueur) joueur;
-            if(this.getName().equalsIgnoreCase(j.getName())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
+        /**
      * Rajoute les coordonnées du Joueur dans le niveau
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -127,6 +106,33 @@ public final class Joueur{
     }
 
 
+    /**
+     * Récupère la valeur de default_x du Joueur et la renvoie
+     * @return Valeur de default_x
+     */
+    public int getDefaultX(){
+        return this.default_x;
+    }
+
+
+    /**
+     * Récupère la valeur de default_y du Joueur et la renvoie 
+     * @return Valeur de default_y
+     */
+    public int getDefaultY(){
+        return this.default_y;
+    }
+
+
+    /**
+     * Met les coordonnées x et y par défaut au Joueur
+     */
+    public void setDefaultXandY(int x, int y){
+        this.default_x = x;
+        this.default_y = y;
+    }
+
+
     /** 
      * Ajouter newScore au score du Joueur puis vérifie si ce dernier est positif ou nul
      * @param newScore Score à ajouter ou retirer du score du Joueur
@@ -136,5 +142,38 @@ public final class Joueur{
         if(this.score < 0){
             this.score = 0;
         }
+    }
+
+    public int getLife(){
+        return this.life;
+    }
+
+
+    public void setLife(int x){
+        this.life -= x;
+    }
+
+
+    /**
+     * Affiche le nom, le score et les coordonnées x et y sous la forme nom : score pts ; Coordonnees : (x,y) 
+     */
+    public String toString(){
+       String point = (this.score > 1) ? " pts" : " pt";
+       return (this.getName() + " : " + this.getScore() + point + " ; Nombre de vies : " + this.getLife() + " vie(s) ; Coordonnees : (" + this.x + "," + this.y + ")");
+    }
+
+
+    /**
+     * Vérifie l'égalité entre deux Joueur en vérifiant si les deux noms sont identiques
+     * @param joueur Joueur à comparer
+     */
+    public boolean equals(Object joueur){
+        if(joueur instanceof Joueur){
+            Joueur j = (Joueur) joueur;
+            if(this.getName().equalsIgnoreCase(j.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 }

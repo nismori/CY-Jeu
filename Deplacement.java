@@ -85,29 +85,37 @@ public class Deplacement {
         case 'Z':
             if(this.n.isPlayer(x-1,y)){
                 this.n.getPiece(x-1, y);
+                this.n.getPiege(x-1, y);
                 this.setClearPlayer(x,y);
-                this.setCoordonnees(x-1,y);
+                if(this.n.isPiege(x,y))
+                    this.setCoordonnees(x-1,y);
             }
             break;
         case 'Q':
             if(this.n.isPlayer(x,y-1)){
                 this.n.getPiece(x,y-1);
+                this.n.getPiege(x,y-1);
                 this.setClearPlayer(x,y);
-                this.setCoordonnees(x,y-1);
+                if(this.n.isPiege(x,y))
+                    this.setCoordonnees(x,y-1);
             }
             break;
         case 'S':
             if(this.n.isPlayer(x+1,y)){
-                this.n.getPiece(x+1, y);
+                this.n.getPiece(x+1,y);
+                this.n.getPiege(x+1, y);
                 this.setClearPlayer(x,y);
-                this.setCoordonnees(x+1,y);
+                if(this.n.isPiege(x,y))
+                    this.setCoordonnees(x+1,y);
             }
             break;
         case 'D':
             if(this.n.isPlayer(x,y+1)){
                 this.n.getPiece(x,y+1);
+                this.n.getPiege(x,y+1);
                 this.setClearPlayer(x,y);
-                this.setCoordonnees(x,y+1);
+                if(this.n.isPiege(x,y))
+                    this.setCoordonnees(x,y+1);
             }
             break;
         default:
@@ -126,11 +134,16 @@ public class Deplacement {
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
-           if(this.n.isFinish()){
+            if(this.n.isFinishPiece()){
                 this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
                 System.out.println("VICTOIRE");
                 System.exit(0);
-           }
+            }
+            if(this.n.isFinishPiege()){
+                this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
+                System.out.println("GAME OVER");
+                System.exit(0);
+            }
             this.Movement(); 
             System.out.print("\033[H\033[2J");
             System.out.flush();
