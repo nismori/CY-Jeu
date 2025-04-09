@@ -149,9 +149,16 @@ public final class Joueur{
     }
 
 
-    public void setLife(int x){
+    public void removeLife(int x){
         this.life -= x;
     }
+
+
+    public void setLife(int x){
+        this.life = x;
+    }
+
+    
 
 
     /**

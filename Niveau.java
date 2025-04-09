@@ -89,9 +89,7 @@ public final class Niveau {
      */
     public void getPiege(int x, int y){
         if(this.niveau[x][y] == '*'){
-            this.joueur.setLife(1);
-            this.joueur.setX(this.joueur.getDefaultX());
-            this.joueur.setY(this.joueur.getDefaultY());
+            this.joueur.removeLife(1);
         }
     } 
 
@@ -236,8 +234,10 @@ public final class Niveau {
             String n = this.toString();
             String nom = this.joueur.getName();
             String score = String.valueOf(this.joueur.getScore());
+            String life = String.valueOf(this.joueur.getLife());
             Files.write(filePath, List.of(nom), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             Files.write(filePath,List.of(score), StandardOpenOption.APPEND);
+            Files.write(filePath,List.of(life), StandardOpenOption.APPEND);
             Files.write(filePath,List.of(n), StandardOpenOption.APPEND);
             System.out.println("Fichier '" + fileName + "' écrit avec succès !");
         } catch (IOException e) {
@@ -266,8 +266,9 @@ public final class Niveau {
 
             String name = lines.get(0); 
             int score = Integer.valueOf(lines.get(1));
+            int life = Integer.valueOf(lines.get(2));
     
-            List<String> remainingLines = lines.subList(2, lines.size());
+            List<String> remainingLines = lines.subList(3, lines.size());
             
             int rows = remainingLines.size()-1;
             int cols = remainingLines.get(0).length();
@@ -314,7 +315,7 @@ public final class Niveau {
                         this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
                     }
                     if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '*'){
-                        this.joueur.setLife(1);
+                        this.joueur.removeLife(1);
                         this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
                     }
                 }

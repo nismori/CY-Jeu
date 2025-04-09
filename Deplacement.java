@@ -31,8 +31,8 @@ public class Deplacement {
     public void setCoordonnees(int x, int y){
         this.n.getNiveau(n)[x][y] = '1';
         this.n.getJoueur().addCoordonnees(x,y);
-        this.x = this.n.getJoueur().getX();
-        this.y = this.n.getJoueur().getY();
+        this.x = x;
+        this.y = y;
     }
 
 
@@ -87,7 +87,11 @@ public class Deplacement {
                 this.n.getPiece(x-1, y);
                 this.n.getPiege(x-1, y);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y))
+                if(this.n.isPiege(x-1,y)){
+                    this.n.getNiveau(n)[x-1][y] = ' ';
+                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                }
+                else
                     this.setCoordonnees(x-1,y);
             }
             break;
@@ -96,7 +100,11 @@ public class Deplacement {
                 this.n.getPiece(x,y-1);
                 this.n.getPiege(x,y-1);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y))
+                if(this.n.isPiege(x,y-1)){
+                    this.n.getNiveau(n)[x][y-1] = ' ';
+                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                }
+                else
                     this.setCoordonnees(x,y-1);
             }
             break;
@@ -105,7 +113,11 @@ public class Deplacement {
                 this.n.getPiece(x+1,y);
                 this.n.getPiege(x+1, y);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y))
+                if(this.n.isPiege(x+1,y)){
+                    this.n.getNiveau(n)[x+1][y] = ' ';
+                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                }
+                else
                     this.setCoordonnees(x+1,y);
             }
             break;
@@ -114,7 +126,11 @@ public class Deplacement {
                 this.n.getPiece(x,y+1);
                 this.n.getPiege(x,y+1);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y))
+                if(this.n.isPiege(x,y+1)){
+                    this.n.getNiveau(n)[x][y+1] = ' ';
+                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                }
+                else
                     this.setCoordonnees(x,y+1);
             }
             break;

@@ -46,8 +46,11 @@ public class Main {
             System.out.println("Fichier '" + fileName + "' chargé avec succès depuis la commande 'java -jar Main.jar niveauBob.txt'");
             System.out.println();
         }
+        else{
+            n2.addPlayer(j2, 1, 1);
+        }
         Deplacement d = new Deplacement(n2);
-        d.Movement(50);
+        d.Movement(500);
         System.out.println(n2);
         n2.saveFile("niveau"+n2.getJoueur().getName()+".txt");
         System.out.println();
