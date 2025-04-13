@@ -146,33 +146,38 @@ public class Deplacement {
      * @param x Nombre de fois que le joueur se déplace
      * @param fileName Nom du fichier en argument
      * @throws IOException En cas de problème de lecture du caractère
-     * S'il n'y a plus de pièce, on arrête le jeu
-     * Si le joueur n'a plus de vie, on arrête aussi le jeu
-     * On sauvegarde le niveau dans un fichier texte correspondant au nom du fichier en argument. Sinon on considère que le Joueur ne veut joueur qu'une partie et on ne sauvegarde pas
+     * Cas avec un argument : 
+        * S'il n'y a plus de pièces, on arrête le jeu
+        * Si le joueur n'a plus de vie, on arrête aussi le jeu
+        * On sauvegarde le niveau dans un fichier texte correspondant au nom du fichier en argument.
+    * Cas sans argument : 
+        * Si le niveau n'a plus de pièces ou le joueur de vies, on arrête de déplacer le joueur. C'est loadGame() qui prend la suite.
      */
     public void Movement(int x, String fileName) throws IOException{
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
             if(this.n.isFinishPiece()){
-                if(fileName != null)
+                if(fileName != null){
                     this.n.saveFile(fileName);
-                //else
-                    //this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
-                System.out.println("VICTOIRE");
-                System.exit(0);
+                    System.out.println("VICTOIRE");
+                    System.exit(0);
+                }
+                else
+                    clear();
+                    break;
             }
             if(this.n.isFinishPiege()){
-                if(fileName != null)
+                if(fileName != null){
                     this.n.saveFile(fileName);
-                //else
-                    //this.n.saveFile("niveau"+this.n.getJoueur().getName()+".txt");
-                System.out.println("GAME OVER");
-                System.exit(0);
+                    System.out.println("GAME OVER");
+                    System.exit(0);
+                }
+                else
+                    break;
             }
             this.Movement(); 
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            clear();
             System.out.println("\n" + this.n);
         }
     }
