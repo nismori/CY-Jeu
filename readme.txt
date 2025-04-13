@@ -8,4 +8,6 @@ Compiler :
 2: jar cfm Main.jar META-INF/MANIFEST.MF .
 
 Executer :
-3: java -jar Main.jar niveauBob.txt
+3: java -jar Main.jar argument
+
+ATTENTION : Pour l'argument, ne prennez pas un niveau qui existe déjà (Niveau1.txt, Niveau2.txt, Niveau3.txt, Niveau4.txt et Niveau5.txt)
