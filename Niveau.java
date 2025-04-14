@@ -57,7 +57,6 @@ public final class Niveau {
 
     /**
      * Permet de récupérer le Niveau d'un objet niveau. Permet de traiter des cas particuliers comme equals().
-     * @param Niveau Le Niveau en paramètre
      * @return Le tableau de charactère du Niveau
      */
     public char[][] getNiveau(){
