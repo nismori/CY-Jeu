@@ -1,0 +1,45 @@
+Monde 2 Niveau 5 :
+    -Si le niveau en paramètre n'existe pas, un niveau par défaut est créé et ce dernier fini par être enregistrer dans un fichier texte du nom de l'argument. Lors de la prochaine partie, si le fichier texte existe toujours, il est bien chargé.
+    -Correction des autres problèmes (doc et conventions)
+    -Modification : Toute les modifications demandés. Boolean renommé en intToBoolean
+
+
+Monde 2 Niveau 6:
+    -Ajout de code dans le main et de fichiers pour lancer un .jar avec un argument
+    -Modifications : Main.java, Deplacement/Joueur/Deplacement/Niveau.class et META-INF
+
+
+Monde 3 Niveau 1:
+    -Ajout du score pour le Joueur et de pièces dans le Niveau
+    -Le score est sauvegardé dans le fichier texte contenant le Niveau
+    -Le Niveau est terminé quand le Joueur a collecté toutes les pièces
+    -Modifications : 
+        -Main.java : Pour executer les nouvelles fonctionnalités
+        -Joueur.java : Classe Joueur (score), resetScore()
+        -Niveau.java : Classe Niveau (pièces), getPiece(), isFinishPiece(), saveFile(), loadFile(), numberOfPieces()
+        -Deplacement.java : Movement() avec (int x, String fileName) (affiche VICTOIRE et sauvegarde le niveau quand on récupère toutes les pièces)
+    
+
+Monde 3 Niveau 2: 
+    -Ajout de la vie et de la position par défaut pour le Joueur et de pièces dans le Niveau 
+    -Le joueur perd une vie quand il prend une pièce et est remis à sa position par défaut
+    -On met GAME OVER quand le joueur n'a plus de vies
+    -Modifications : 
+        -Main.java : Pour executer les nouvelles fonctionnalités
+        -Joueur.java : Classe Joueur (vies), getDefaultX(), getDefaultY(), setDefaultXandY(), getLife(), removeLife(), setLife()
+        -Niveau.java : Class Niveau(pièges), isPiege() getPiege(), isFinishPiege(), saveFile(), loadFile(), numberOfPieges()
+        -Deplacement.java : Movement() avec (int x, String fileName) (affiche GAME OVER et sauvegarde le niveau quand le joueur n'a plus de vies)
+
+
+Monde 3 Niveau 3:
+    -Deux modes de lancement:
+        -Mode "par défaut" où le joueur a un argument dans le Main.jar. Tout ce qu'on a eu avant avec la sauvegarde du Joueur dans le Niveau
+        -Mode avec plusieurs niveaux où le joueur n'a pas d'argument
+    -Dans le mode avec plusieurs niveaux, le joueur enchaîne les niveaux 1 à 5. Ces derniers sont chargés depuis le fichiers texte correspondant.
+    -Si il meurt, on lui propose de recommencer depuis le niveau 1 avec le score et la vie reinitialisés.
+    -Si il arrive au bout du niveau 5, on le remercie
+    -Modifications:
+        -Main.java : Pour executer les nouvelles fonctionnalités
+        -Joueur.java : getJoueur()
+        -Niveau.java : loadNiveau(), Retry(), loadGame()
+        -Deplacement.java : Movement() avec (int x, String fileName) (Création des deux modes de lancement)

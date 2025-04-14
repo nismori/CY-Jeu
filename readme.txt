@@ -11,3 +11,4 @@ Executer :
 3: java -jar Main.jar argument
 
 ATTENTION : Pour l'argument, ne prennez pas un niveau qui existe déjà (Niveau1.txt, Niveau2.txt, Niveau3.txt, Niveau4.txt et Niveau5.txt)
+ATTENTION : Si vous voulez modifier les fichiers texte, garder la même taille de ligne pour chaque ligne.

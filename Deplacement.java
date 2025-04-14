@@ -29,7 +29,7 @@ public class Deplacement {
      * @param y Coordonnée y
      */
     public void setCoordonnees(int x, int y){
-        this.n.getNiveau(n)[x][y] = '1';
+        this.n.getNiveau()[x][y] = '1';
         this.n.getJoueur().addCoordonnees(x,y);
         this.x = x;
         this.y = y;
@@ -42,7 +42,7 @@ public class Deplacement {
      * @param y Coordonnée y
      */
     public void setClearPlayer(int x, int y){
-        this.n.getNiveau(n)[x][y] = ' ';
+        this.n.getNiveau()[x][y] = ' ';
     }
 
 

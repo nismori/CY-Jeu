@@ -56,11 +56,11 @@ public final class Niveau {
 
 
     /**
-     * Permet de récupérer le Niveau d'un objet niveau
-     * @param niveau Permet de traiter des cas particuliers comme equals()
-     * @return Le double tableau du Niveau en paramètre
+     * Permet de récupérer le Niveau d'un objet niveau. Permet de traiter des cas particuliers comme equals().
+     * @param Niveau Le Niveau en paramètre
+     * @return Le tableau de charactère du Niveau
      */
-    public char[][] getNiveau(Niveau niveau){
+    public char[][] getNiveau(){
         return this.niveau;
     }
 
@@ -150,7 +150,7 @@ public final class Niveau {
      * @param x entier
      * @return true si x vaut 0, false sinon
      */
-    public Boolean Boolean(int x){
+    public Boolean intToBoolean(int x){
         if(x==0){
             return false;
         }
@@ -204,7 +204,7 @@ public final class Niveau {
                     }
                     Random rand = new Random();
                     int random_number = rand.nextInt(20);
-                    Boolean bool = Boolean(random_number); 
+                    Boolean bool = intToBoolean(random_number); 
                     if(!bool){
                         this.joueur.addCoordonnees(i, j);
                         this.getPiece(i,j);
@@ -336,6 +336,7 @@ public final class Niveau {
         }
     }
 
+    
     /**
      * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score.
      * @param fileName Chemin absolu du fichier
@@ -391,7 +392,7 @@ public final class Niveau {
 
 
     /**
-     * Demande à l'utilisateur s'il veut rejouer
+     * Demande à l'utilisateur s'il veut rejouer. Le N correspond à n'importe quelle touche c'est normal, on a ce système dans plusieurs jeux
      * @return true si l'utilisateur veut rejouer, false sinon
      * @throws IOException En cas de problème de lecture
      */
@@ -509,7 +510,7 @@ public final class Niveau {
 
 
     /**
-     * Affiche le tableau
+     * Affiche le Niveau en affichant le tableau niveau sous forme de String
      */
     public String toString(){
         String tab = "";
@@ -526,11 +527,11 @@ public final class Niveau {
     /**
      * Vérifie que deux Niveau sont égaux en vérifiant s'ils ont le meme objet et tableau 
      * @param niv Un Niveau
+     * @return true si les deux niveaux sont identiques, false sinon
      */
     public boolean equals(Object niv){
         if(niv instanceof Niveau){
-            Niveau n = (Niveau) niv;
-            char[][] tab = getNiveau(n);
+            char[][] tab = getNiveau();
             if((this.niveau.length == tab.length) && (this.niveau[0].length == tab[0].length)){
                 for(int i=0; i<tab.length; i++){
                     for(int j=0; j<tab[0].length; j++){

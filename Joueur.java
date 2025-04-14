@@ -210,6 +210,7 @@ public final class Joueur{
     /**
      * Vérifie l'égalité entre deux Joueur en vérifiant si les deux noms sont identiques
      * @param joueur Joueur à comparer
+     * @return true si les noms des Joueurs sont identiques, false sinon
      */
     public boolean equals(Object joueur){
         if(joueur instanceof Joueur){
