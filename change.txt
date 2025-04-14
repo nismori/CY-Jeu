@@ -36,10 +36,11 @@ Monde 3 Niveau 3:
         -Mode "par défaut" où le joueur a un argument dans le Main.jar. Tout ce qu'on a eu avant avec la sauvegarde du Joueur dans le Niveau
         -Mode avec plusieurs niveaux où le joueur n'a pas d'argument
     -Dans le mode avec plusieurs niveaux, le joueur enchaîne les niveaux 1 à 5. Ces derniers sont chargés depuis le fichiers texte correspondant.
+    -On demande le nom du Joueur avant de commencer les niveaux et on l'attribue au nom du Joueur.
     -Si il meurt, on lui propose de recommencer depuis le niveau 1 avec le score et la vie reinitialisés.
     -Si il arrive au bout du niveau 5, on le remercie
     -Modifications:
-        -Main.java : Pour executer les nouvelles fonctionnalités
-        -Joueur.java : getJoueur()
+        -Main.java : Pour executer les nouvelles fonctionnalités et attribuer au Joueur le nom que l'utilisateur a créé
         -Niveau.java : loadNiveau(), Retry(), loadGame()
         -Deplacement.java : Movement() avec (int x, String fileName) (Création des deux modes de lancement)
+        -Niveau1/2/3/4/5.txt et readme

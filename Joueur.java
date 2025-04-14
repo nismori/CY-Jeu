@@ -1,7 +1,3 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  * Classe créant un <b>Joueur</b> avec un nom unique, un score positif ou nul et des coordonnées dans un <b>Niveau</b>
  * @author Victor
@@ -32,19 +28,6 @@ public final class Joueur{
      */
     public Joueur(){
         this("Joueur "+ (N+1));
-    }
-
-
-    /**
-     * Récupère un caractère que l'utilisateur a saisi
-     * @throws IOException En cas de problème de lecture du caractère
-     * @return Ce qui est renvoyé sous la forme d'un caractère majuscule
-     */
-    public String getJoueur() throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Entrez un nom : ");
-        String input = reader.readLine().trim().toUpperCase();
-        return input.isEmpty() ? "" : input;
     }
 
 
