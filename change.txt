@@ -1,5 +1,13 @@
 Monde 2 Niveau 5 :
-    -Utilisation du système de remplacement par un niveau par défaut de loadFile() pour loadNiveau() si le fichier n'est pas trouvé. La doc a été remplacé
+    -Les Niveaux 1 à 5 sont utilisés pour créer des niveaux facilement et ne sont pas fait pour être pris comme argument. Un niveau pouvant être pris comme argument doit avoir un fichier texte contenant : 
+        -Le nom
+        -Le score
+        -La vie
+        -Le niveau (de taille supérieur à 9x19 car on y place des pièces. On pourrait ne pas placer de pièces, mais le jeu se terminerait instantanément (plus de pièces = VICTOIRE)). Ne pas oublier de mettre un 1 dans le Niveau
+        -Deux lignes vides après le niveau
+        -Idéalement, le meilleur moyen de créer un niveau valide serait de modifier la classe niveau tout en conservant cette contrainte de 9x19 pour les pièces, puis de jouer une partie avec un argument inexistant. A la fin de cette partie, le jeu sauvegardera la partie dans le nouveau fichier argument.
+        -Les fichiers niveauBob.txt et niveauLaura.txt sont des niveaux valides
+    -Les messages d'erreurs ont été modifiés pour être plus explicites
 
 
 Monde 2 Niveau 6:
