@@ -337,7 +337,7 @@ public final class Niveau {
 
     
     /**
-     * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score.
+     * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score. On créé un niveau par défaut si le niveau n'est pas trouvé
      * @param fileName Chemin absolu du fichier
      * @param joueur Joueur à ajouter au niveau
      */
@@ -362,10 +362,10 @@ public final class Niveau {
             }
 
             this.niveau = niveau;
-            this.addPlayer(joueur, 1, 1);
-            this.setCoordonneeWithFile();
 
             if (this.isNiveauExist()) {
+                this.addPlayer(joueur, 1, 1);
+                this.setCoordonneeWithFile();
                 int compteur = this.numberOfPieces();
                 if(compteur>0){
                     this.nbPiece = compteur;
@@ -386,6 +386,9 @@ public final class Niveau {
         }
         catch (IOException e) {
             System.err.println("Le fichier " + fileName + " est vide ou corrompu. Un niveau par défaut a été créé.");
+            Niveau n = new Niveau();
+            this.niveau = n.niveau;
+            this.addPlayer(joueur,5,5);
         }
     }
 

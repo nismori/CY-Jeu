@@ -1,7 +1,5 @@
 Monde 2 Niveau 5 :
-    -Si le niveau en paramètre n'existe pas, un niveau par défaut est créé et ce dernier fini par être enregistrer dans un fichier texte du nom de l'argument. Lors de la prochaine partie, si le fichier texte existe toujours, il est bien chargé.
-    -Correction des autres problèmes (doc et conventions)
-    -Modification : Toute les modifications demandés. Boolean renommé en intToBoolean
+    -Utilisation du système de remplacement par un niveau par défaut de loadFile() pour loadNiveau() si le fichier n'est pas trouvé. La doc a été remplacé
 
 
 Monde 2 Niveau 6:
