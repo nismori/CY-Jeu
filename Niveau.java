@@ -134,7 +134,7 @@ public final class Niveau {
      */
     public boolean isPlayer(int x, int y){
         if((x>=0 && x<this.niveau.length) && (y>=0 && y<this.niveau[0].length)){
-            if(this.niveau[x][y] != '#'){   
+            if(this.niveau[x][y] != '#' && this.niveau[x][x] != '\0'){   
                 return true;
             }
         }
@@ -204,10 +204,10 @@ public final class Niveau {
         } 
     }
 
-
     
     /**
      * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score. On créé un niveau par défaut si le niveau n'est pas trouvé
+     * Le programme comble les cases non initialisées par des espaces ' '
      * @param fileName Chemin absolu du fichier
      * @param joueur Joueur à ajouter au niveau
      */
@@ -219,15 +219,23 @@ public final class Niveau {
             if (lines.isEmpty()) {
                 throw new IOException();
             }
-            
-            int rows = lines.size();
-            int cols = lines.get(0).length();
-            char[][] niveau = new char[rows][cols];
-            
-            for (int i = 0; i < rows; i++) {
+
+            int cols = lines.size();
+            int max = lines.get(0).length();
+            for(int i = 1; i < cols; i++) {
+                if (lines.get(i).length() > max)
+                    max = lines.get(i).length();       
+            }
+            int rows = max;
+            char[][] niveau = new char[cols][rows];
+
+            for (int i = 0; i < cols; i++) {
                 String line = lines.get(i);
-                for (int j = 0; j < line.length(); j++) {
-                    niveau[i][j] = line.charAt(j);
+                for(int j = 0; j < rows; j++){
+                    if(j<line.length())
+                        niveau[i][j] = line.charAt(j);
+                    else
+                        niveau[i][j] = ' ';
                 }
             }
 
