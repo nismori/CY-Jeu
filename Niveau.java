@@ -4,9 +4,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Classe créant un <b>Niveau</b> aleatoirement compose de <i>mur</i> '#', de <i>vide</i> ' ', de <i>pièces</i> '.' de <i>pièges</i> '*' ainsi qu'un <b>Joueur</b> '1'
