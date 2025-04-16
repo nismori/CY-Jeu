@@ -187,153 +187,25 @@ public final class Niveau {
 
 
     /**
-     * Si les coordonnées de placement du joueur ne sont pas conforme, on place le joueur sur une case aléatoire. 
-     * Pour ça on choisit un nombre entre 0 et 19 et si ce dernier est 0, alors on le place sur cette case. 
-     * Sinon on le place sur la première case disponible à la fin
+     * Si les coordonnées de placement du joueur ne sont pas conforme, on place le joueur sur la première case vide disponible. 
      */
     public void addPlayerDefault(){
-        int n = 0; int x = 0; int y = 0;
+        int x = 0; int y = 0;
         for(int i=0; i<this.niveau.length; i++){
             for(int j=0; j<this.niveau[0].length; j++){
                 if(this.niveau[i][j] == ' '){
-                    if(n == 0){
-                        x = i;
-                        y = j;
-                        n = 1;
-                    }
-                    Random rand = new Random();
-                    int random_number = rand.nextInt(20);
-                    Boolean bool = intToBoolean(random_number); 
-                    if(!bool){
-                        this.joueur.addCoordonnees(i, j);
-                        this.getPiece(i,j);
-                        this.getPiege(i,j);
-                        this.joueur.setDefaultXandY(x,y);
-                        this.niveau[i][j] = '1';
-                        return;
-                    }
+                    this.joueur.addCoordonnees(x, y);
+                    this.getPiece(x, y);
+                    this.getPiege(x, y);
+                    this.joueur.setDefaultXandY(x,y);
+                    this.joueur.addCoordonnees(x, y);
+                    this.niveau[x][y] = '1';
+                    return;
                 }
             }
-        }
-        if(n==1){
-            this.joueur.addCoordonnees(x, y);
-            this.getPiece(x, y);
-            this.getPiege(x, y);
-            this.joueur.setDefaultXandY(x,y);
-            this.joueur.addCoordonnees(x, y);
-            this.niveau[x][y] = '1';
-            return;
-        }
-    } 
-
-
-    /**
-     * Le fichier est sauvegardé dans le fichier <i>fileName</i>. Si le nom du fichier essaye d'accéder à des données systèmes, le programme renvoie une erreur
-     * On enregistre le nom, le score et le nombre de vie du Joueur puis le Niveau dans le fichier
-     * @param fileName Chemin absolu du fichier
-     */
-    public void saveFile(String fileName) {
-        Path filePath = Paths.get(fileName);
-        try {
-            String n = this.toString();
-            String nom = this.joueur.getName();
-            String score = String.valueOf(this.joueur.getScore());
-            String life = String.valueOf(this.joueur.getLife());
-            Files.write(filePath, List.of(nom), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-            Files.write(filePath,List.of(score), StandardOpenOption.APPEND);
-            Files.write(filePath,List.of(life), StandardOpenOption.APPEND);
-            Files.write(filePath,List.of(n), StandardOpenOption.APPEND);
-            //System.out.println("Fichier '" + fileName + "' écrit avec succès !");
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
-        }
+        } 
     }
 
-
-    /**
-     * Cette fonction récupère le Niveau d'un fichier
-     * On récupère d'abord le Joueur avec son nom, son score et sa vie dans les trois premières lignes
-     * Puis le Niveau qui prend le reste du fichier
-     * On déduit le nombre de pièces à récupérer avec le nombre de pièces restantes dans le Niveau. S'il n'y en a plus, on les remet toutes
-     * Si le joueur n'a plus de vies, on créé un niveau par défaut avec 3 vies
-     * Si on a une erreur, on créé un niveau par défaut. Il y a des erreurs personnalisés en fonction de l'erreur 
-     * @param fileName Chemin absolu du fichier
-     */
-    public void loadFile(String fileName) {
-        Path filePath = Paths.get(fileName);
-        Joueur joueur_default = new Joueur("Bob");
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            
-            if (lines.isEmpty()) {
-                throw new IOException();
-            }
-
-            String name = lines.get(0); 
-            int score = Integer.valueOf(lines.get(1));
-            int life = Integer.valueOf(lines.get(2));
-    
-            List<String> remainingLines = lines.subList(3, lines.size());
-            
-            int rows = remainingLines.size()-1;
-            int cols = remainingLines.get(0).length();
-            char[][] niveau = new char[rows][cols];
-            
-            for (int i = 0; i < rows; i++) {
-                String line = remainingLines.get(i);
-                for (int j = 0; j < line.length(); j++) {
-                    niveau[i][j] = line.charAt(j);
-                }
-            }
-
-            if(life == 0){
-                throw new IllegalStateException();
-            }
-
-            this.niveau = niveau;
-
-            Joueur j = new Joueur(name); //Le mot clé final empêche toute modification du nom du joueur actuel
-            this.joueur = j;
-            this.joueur.addScore(score);
-            this.joueur.setLife(life);
-            this.setCoordonneeWithFile();
-
-            if (this.isNiveauExist()) {
-                int compteur = this.numberOfPieces();
-                if(compteur>0){
-                    this.nbPiece = compteur;
-                }
-                else{
-                    this.niveau[1][18] = '.';
-                    this.niveau[1][1] = '.';
-                    this.niveau[8][18] = '.';
-                    this.niveau[8][1] = '.';
-                }
-                if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '.'){
-                    this.joueur.addScore(1);
-                    this.nbPiece--;
-                    this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
-                }
-                if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '*'){
-                    this.joueur.removeLife(1);
-                    this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
-                }
-            }
-            else{
-                throw new IOException();
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Le fichier " + fileName + " est vide ou corrompu. Un niveau par défaut a été créé.");
-            Niveau n = new Niveau();
-            this.niveau = n.niveau;
-            this.addPlayer(joueur_default,5,5);
-        }
-        catch (IllegalStateException e){
-            System.err.println("Le joueur n'a plus de vies. Un niveau par défaut a été créé.");
-            this.addPlayer(joueur_default,5,5);
-        }
-    }
 
     
     /**

@@ -89,7 +89,6 @@ public class Deplacement {
                 this.n.getPiege(x-1, y);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x-1,y)){
-                    //this.n.getNiveau(n)[x-1][y] = ' ';  //Permet de faire disparaitre les pièges apprait être tombé dessus. Par défaut, ils ne disparaissent pas
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -102,7 +101,6 @@ public class Deplacement {
                 this.n.getPiege(x,y-1);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x,y-1)){
-                    //this.n.getNiveau(n)[x][y-1] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -115,7 +113,6 @@ public class Deplacement {
                 this.n.getPiege(x+1, y);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x+1,y)){
-                    //this.n.getNiveau(n)[x+1][y] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -128,7 +125,6 @@ public class Deplacement {
                 this.n.getPiege(x,y+1);
                 this.setClearPlayer(x,y);
                 if(this.n.isPiege(x,y+1)){
-                    //this.n.getNiveau(n)[x][y+1] = ' ';
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
@@ -146,35 +142,18 @@ public class Deplacement {
      * @param x Nombre de fois que le joueur se déplace
      * @param fileName Nom du fichier en argument
      * @throws IOException En cas de problème de lecture du caractère
-     * Cas avec un argument : 
-        * S'il n'y a plus de pièces, on arrête le jeu
-        * Si le joueur n'a plus de vie, on arrête aussi le jeu
-        * On sauvegarde le niveau dans un fichier texte correspondant au nom du fichier en argument.
-    * Cas sans argument : 
-        * Si le niveau n'a plus de pièces ou le joueur de vies, on arrête de déplacer le joueur. C'est loadGame() qui prend la suite.
+     * Si le niveau n'a plus de pièces ou le joueur de vies, on arrête de déplacer le joueur. C'est loadGame() qui prend la suite.
      */
     public void Movement(int x, String fileName) throws IOException{
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
             if(this.n.isFinishPiece()){
-                if(fileName != null){
-                    this.n.saveFile(fileName);
-                    System.out.println("VICTOIRE");
-                    System.exit(0);
-                }
-                else
-                    clear();
-                    break;
+                clear();
+                break;
             }
             if(this.n.isFinishPiege()){
-                if(fileName != null){
-                    this.n.saveFile(fileName);
-                    System.out.println("GAME OVER");
-                    System.exit(0);
-                }
-                else
-                    break;
+                break;
             }
             this.Movement(); 
             clear();
