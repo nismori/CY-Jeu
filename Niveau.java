@@ -7,40 +7,40 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Classe créant un <b>Niveau</b> aleatoirement compose de <i>mur</i> '#', de <i>vide</i> ' ', de <i>pièces</i> '.' de <i>pièges</i> '*' ainsi qu'un <b>Joueur</b> '1'
+ * Classe créant un <b>Niveau</b> aleatoirement composé de classe Cellule ainsi qu'un <b>Joueur</b> '1' ou non
  */
 public final class Niveau {
-    private char[][] niveau;
+    private Cellule[][] niveau;
     private Joueur joueur;
     private int nbPiece = 4;
 
     /**
-     * Assigner les valeurs '#', ' ', '.' et '*' au tableau
+     * Assigner les valeurs à la classe Cellule
      */
     public Niveau(){
-        this.niveau = new char[10][20];
+        this.niveau = new Cellule[10][20];
         for(int j=0; j<niveau[0].length; j++){
-            this.niveau[0][j] = '#';
-            this.niveau[niveau.length-1][j] = '#';
+            this.niveau[0][j] = new Cellule('#');
+            this.niveau[niveau.length-1][j] = new Cellule('#');
         }
         for(int i=0; i<niveau.length; i++){
-            this.niveau[i][0] = '#';
-            this.niveau[i][niveau[0].length-1]= '#';
+            this.niveau[i][0] = new Cellule('#');
+            this.niveau[i][niveau[0].length-1]= new Cellule('#');
         }
         for(int i=1; i<niveau.length-1d; i++){   
             for(int j=1; j<niveau[0].length-1; j++){
-                this.niveau[i][j] = ' ';
+                this.niveau[i][j] = new Cellule(' ');
             }
         }
-        this.niveau[1][18] = '.';
-        this.niveau[1][1] = '.';
-        this.niveau[8][18] = '.';
-        this.niveau[8][1] = '.';
+        this.niveau[1][18] = new Cellule('.');
+        this.niveau[1][1] = new Cellule('.');
+        this.niveau[8][18] = new Cellule('.');
+        this.niveau[8][1] = new Cellule('.');
 
-        this.niveau[2][18] = '*';
-        this.niveau[1][2] = '*';
-        this.niveau[8][17] = '*';
-        this.niveau[8][2] = '*';
+        this.niveau[2][18] = new Cellule('.');
+        this.niveau[1][2] = new Cellule('.');
+        this.niveau[8][17] = new Cellule('.');
+        this.niveau[8][2] = new Cellule('.');
     }
 
 
@@ -57,7 +57,7 @@ public final class Niveau {
      * Permet de récupérer le Niveau d'un objet niveau. Permet de traiter des cas particuliers comme equals().
      * @return Le tableau de charactère du Niveau
      */
-    public char[][] getNiveau(){
+    public Cellule[][] getNiveau(){
         return this.niveau;
     }
 
@@ -69,7 +69,8 @@ public final class Niveau {
      * @param y coordonnée y
      */
     public void getPiece(int x, int y){
-        if(this.niveau[x][y] == '.'){
+        if(this.niveau[x][y].getValue() == '.'){
+            this.niveau[x][y].setValue(' ');
             this.joueur.addScore(1);
             this.nbPiece--;
         }
@@ -82,7 +83,7 @@ public final class Niveau {
      * @param y coordonnée y
      */
     public void getPiege(int x, int y){
-        if(this.niveau[x][y] == '*'){
+        if(this.niveau[x][y].getValue() == '*'){
             this.joueur.removeLife(1);
         }
     } 
@@ -95,7 +96,7 @@ public final class Niveau {
      * @return true si la case est un piège, false sinon
      */
     public boolean isPiege(int x, int y){
-        if(this.niveau[x][y] == '*')
+        if(this.niveau[x][y].getValue() == '*')
             return true;
         return false;
     }
@@ -134,7 +135,7 @@ public final class Niveau {
      */
     public boolean isPlayer(int x, int y){
         if((x>=0 && x<this.niveau.length) && (y>=0 && y<this.niveau[0].length)){
-            if(this.niveau[x][y] != '#' && this.niveau[x][x] != '\0'){   
+            if(this.niveau[x][y].getValue() != '#' && this.niveau[x][x].getValue() != '\0'){   
                 return true;
             }
         }
@@ -175,7 +176,7 @@ public final class Niveau {
             this.getPiece(x,y);
             this.getPiege(x,y);
             this.joueur.setDefaultXandY(x,y);
-            this.niveau[x][y] = '1';
+            this.niveau[x][y].setPlayer(); 
         } 
         catch(Exception e){
             this.joueur = j;
@@ -191,13 +192,13 @@ public final class Niveau {
         int x = 0; int y = 0;
         for(int i=0; i<this.niveau.length; i++){
             for(int j=0; j<this.niveau[0].length; j++){
-                if(this.niveau[i][j] == ' '){
+                if(this.niveau[i][j].getValue() == ' '){
                     this.joueur.addCoordonnees(x, y);
                     this.getPiece(x, y);
                     this.getPiege(x, y);
                     this.joueur.setDefaultXandY(x,y);
                     this.joueur.addCoordonnees(x, y);
-                    this.niveau[x][y] = '1';
+                    this.niveau[x][y].setPlayer(); 
                     return;
                 }
             }
@@ -227,15 +228,15 @@ public final class Niveau {
                     max = lines.get(i).length();       
             }
             int rows = max;
-            char[][] niveau = new char[cols][rows];
+            Cellule[][] niveau = new Cellule[cols][rows];
 
             for (int i = 0; i < cols; i++) {
                 String line = lines.get(i);
                 for(int j = 0; j < rows; j++){
                     if(j<line.length())
-                        niveau[i][j] = line.charAt(j);
+                        niveau[i][j] = new Cellule(line.charAt(j));
                     else
-                        niveau[i][j] = ' ';
+                        niveau[i][j] = new Cellule(' ');
                 }
             }
 
@@ -247,14 +248,14 @@ public final class Niveau {
                 int compteur = this.numberOfPieces();
                 if(compteur>0){
                     this.nbPiece = compteur;
-                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '.'){
+                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].getValue() == '.'){
                         this.joueur.addScore(1);
                         this.nbPiece--;
-                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
+                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].setPlayer();
                     }
-                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] == '*'){
+                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].getValue() == '*'){
                         this.joueur.removeLife(1);
-                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()] = '1';
+                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].setPlayer();
                     }
                 }
             } 
@@ -328,10 +329,10 @@ public final class Niveau {
      * Trouve le Joueur '1' dans le Niveau et donne les coordonnées x,y au Joueur
      */
     public void setCoordonneeWithFile(){
-        char[][] tab = this.niveau;
+        Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[0].length; j++){
-                if(tab[i][j] == '1'){
+                if(tab[i][j].getValue() == '1'){
                     this.joueur.setX(i);
                     this.joueur.setY(j);
                     this.joueur.setDefaultXandY(i,j);
@@ -347,10 +348,10 @@ public final class Niveau {
      */
     public int numberOfPieces(){
         int compteur = 0;
-        char[][] tab = this.niveau;
+        Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[0].length; j++){
-                if(tab[i][j] == '.'){
+                if(tab[i][j].getValue() == '.'){
                     compteur++;
                 }
             }
@@ -365,10 +366,10 @@ public final class Niveau {
      */
     public int numberOfPieges(){
         int compteur = 0;
-        char[][] tab = this.niveau;
+        Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[0].length; j++){
-                if(tab[i][j] == '.'){
+                if(tab[i][j].getValue() == '.'){
                     compteur++;
                 }
             }
@@ -396,7 +397,10 @@ public final class Niveau {
         String tab = "";
         for(int i=0; i<this.niveau.length; i++){
             for(int j=0; j<this.niveau[0].length; j++){
-                tab += this.niveau[i][j];
+                if(this.niveau[i][j].getPlayer() == '1')
+                    tab += this.niveau[i][j].getPlayer();
+                else
+                    tab += this.niveau[i][j].getValue();
             }
             tab += '\n';
         }
@@ -411,7 +415,7 @@ public final class Niveau {
      */
     public boolean equals(Object niv){
         if(niv instanceof Niveau){
-            char[][] tab = getNiveau();
+            Cellule[][] tab = getNiveau();
             if((this.niveau.length == tab.length) && (this.niveau[0].length == tab[0].length)){
                 for(int i=0; i<tab.length; i++){
                     for(int j=0; j<tab[0].length; j++){
