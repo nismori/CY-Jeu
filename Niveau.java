@@ -271,7 +271,7 @@ public final class Niveau {
     public boolean Retry() throws IOException{
         System.out.println("GAME OVER");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Voulez-vous rejouer(O/N) ? ");
+        System.out.print("Voulez-vous rejouer (O/N) ? ");
         String input = reader.readLine().trim().toUpperCase();
         char answer = input.isEmpty() ? '\0' : input.charAt(0);
         if(answer == 'o' || answer == 'O')
