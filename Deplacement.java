@@ -75,60 +75,68 @@ public class Deplacement {
 
 
     /**
-     * En fonction de commande, fait avancer le Joueur en le supprimant de son ancienne coordonnée et en ajoutant la nouvelle
-     * Si le Joueur va dépasser les limites de la carte, on ne le "déplace" pas
+     * On envoie le joueur sur la coordonnée de la cellule voisine en fonction de la commande du joueur (Z/Q/S/D) et on le supprime de son ancienne position
      * On récupère la pièce sur la case où se déplace le Joueur
      * On renvoie le Joueur à sa position par défaut s'il tombe sur un piège, calculée lors du lancement du programme. On lui fait aussi perdre une vie
      * @param commande un caractère parmi {'Z','Q','S','D'}
      */
     public void Movement(char commande){
+        int newX = -1; int newY = -1;
         switch(commande){
         case 'Z':
-            if(this.n.isPlayer(x,y-1)){
-                this.n.getPiece(x,y-1);
-                this.n.getPiege(x,y-1);
+            newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
+            newY = this.n.getNiveau()[y][x].getVoisinHaut().getY();
+            if(this.n.isPlayer(newX,newY)){
+                this.n.getPiece(newX,newY);
+                this.n.getPiege(newX,newY);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y-1)){
+                if(this.n.isPiege(newX,newY)){
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
-                    this.setCoordonnees(x,y-1);
+                    this.setCoordonnees(newX,newY);
             }
             break;
         case 'Q':
-            if(this.n.isPlayer(x-1,y)){
-                this.n.getPiece(x-1, y);
-                this.n.getPiege(x-1, y);
+            newX = this.n.getNiveau()[y][x].getVoisinGauche().getX();
+            newY = this.n.getNiveau()[y][x].getVoisinGauche().getY();
+            if(this.n.isPlayer(newX,newY)){
+                this.n.getPiece(newX,newY);
+                this.n.getPiege(newX,newY);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x-1,y)){
+                if(this.n.isPiege(newX,newY)){
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
-                    this.setCoordonnees(x-1,y);
+                    this.setCoordonnees(newX,newY);
             }
             break;
         case 'S':
-            if(this.n.isPlayer(x,y+1)){
-                this.n.getPiece(x,y+1);
-                this.n.getPiege(x,y+1);
+            newX = this.n.getNiveau()[y][x].getVoisinBas().getX();
+            newY = this.n.getNiveau()[y][x].getVoisinBas().getY();
+            if(this.n.isPlayer(newX,newY)){
+                this.n.getPiece(newX,newY);
+                this.n.getPiege(newX,newY);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x,y+1)){
+                if(this.n.isPiege(newX,newY)){
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
-                    this.setCoordonnees(x,y+1);
+                    this.setCoordonnees(newX,newY);
             }
             break;
         case 'D':
-            if(this.n.isPlayer(x+1,y)){
-                this.n.getPiece(x+1,y);
-                this.n.getPiege(x+1, y);
+            newX = this.n.getNiveau()[y][x].getVoisinDroit().getX();
+            newY = this.n.getNiveau()[y][x].getVoisinDroit().getY();
+            if(this.n.isPlayer(newX,newY)){
+                this.n.getPiece(newX,newY);
+                this.n.getPiege(newX,newY);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x+1,y)){
+                if(this.n.isPiege(newX,newY)){
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
-                    this.setCoordonnees(x+1,y);
+                    this.setCoordonnees(newX,newY);
             }
             break;
         default:

@@ -4,13 +4,23 @@
 public class Cellule {
     private char caractere;
     private char joueur = ' ';
+    private int x;
+    private int y;
+    private Cellule VGauche;
+    private Cellule VDroit;
+    private Cellule VHaut;
+    private Cellule VBas;
 
     /**
      * Constructeur de la classe Cellule.
-     * @param x le caractère représentant la cellule (pièce, mur, vide ou piège)
+     * @param c le caractère représentant la cellule (pièce, mur, vide ou piège)
+     * @param x position x de la cellule dans le tableau
+     * @param y position y de la cellule dans le tableau
      */
-    public Cellule(char x){
-        switch(x){
+    public Cellule(char c, int x, int y){
+        this.x = x;
+        this.y = y;
+        switch(c){
             case(' '):
                 caractere = ' ';
                 break;
@@ -27,6 +37,36 @@ public class Cellule {
                 caractere = ' ';
                 break;
         }
+    }
+
+    /**
+     * Constructeur des 4 voisins d'une classe Cellule (Gauche,Droit,Haut,Bas)
+     * @param niveau Un tableau contenant pour chaque case une classe cellule
+     */
+    public void setVoisins(Cellule[][] niveau){
+        //Vgauche = x-1 => x>=0 this.VGauche = niveau[x-1][y]
+        //Vdroit = x+1 => x<niveau[0].length
+        //Vhaut = y-1 => y>=0
+        //Vbas = y+1 => y<niveau.length
+        if(x-1 >= 0)
+            this.VGauche = niveau[y][x-1];
+        else
+            this.VGauche = niveau[y][niveau[0].length-1];
+
+        if(x+1 < niveau[0].length)
+            this.VDroit = niveau[y][x+1];
+        else
+            this.VDroit = niveau[y][0];
+
+        if(y-1 >= 0)
+            this.VHaut = niveau[y-1][x];
+        else
+            this.VHaut = niveau[niveau.length-1][x];
+
+        if(y+1 < niveau.length)
+            this.VBas = niveau[y+1][x];
+        else
+            this.VBas = niveau[0][x];
     }
 
 
@@ -70,5 +110,59 @@ public class Cellule {
      */
     public void clearPlayer(){
         this.joueur = ' ';
+    }
+
+
+    /**
+     * Cette méthode permet de récupérer la case voisine gauche de la cellule
+     * @return case voisine gauche de la cellule
+     */
+    public Cellule getVoisinGauche(){
+        return this.VGauche;
+    }
+    
+
+    /**
+     * Cette méthode permet de récupérer la case voisine droite de la cellule
+     * @return case voisine droite de la cellule
+     */
+    public Cellule getVoisinDroit(){
+        return this.VDroit;
+    }
+
+
+    /**
+     * Cette méthode permet de récupérer la case voisine haute de la cellule
+     * @return case voisine haute de la cellule
+     */
+    public Cellule getVoisinHaut(){
+        return this.VHaut;
+    }
+
+
+    /**
+     * Cette méthode permet de récupérer la case voisine basse de la cellule
+     * @return case voisine basse de la cellule
+     */
+    public Cellule getVoisinBas(){
+        return this.VBas;
+    }
+
+
+    /**
+     * Cette méthode permet de récupérer la position x de la cellule dans le tableau
+     * @return position x de la cellule dans le tableau
+     */
+    public int getX(){
+        return this.x;
+    }
+
+
+    /**
+     * Cette méthode permet de récupérer la position y de la cellule dans le tableau
+     * @return position y de la cellule dans le tableau
+     */
+    public int getY(){
+        return this.y;
     }
 }   
