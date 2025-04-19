@@ -426,7 +426,8 @@ public final class Niveau {
      */
     public boolean equals(Object niv){
         if(niv instanceof Niveau){
-            Cellule[][] tab = getNiveau();
+            Niveau niveau = (Niveau) niv;
+            Cellule[][] tab = niveau.getNiveau();
             if((this.niveau.length == tab.length) && (this.niveau[0].length == tab[0].length)){
                 for(int i=0; i<tab.length; i++){
                     for(int j=0; j<tab[i].length; j++){

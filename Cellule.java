@@ -165,4 +165,26 @@ public class Cellule {
     public int getY(){
         return this.y;
     }
-}   
+
+
+    /**
+     * Affiche le caractère contenu par la cellule
+     */
+    public String toString(){
+        return String.valueOf(caractere);
+    }
+
+
+    /**
+     * Vérifie l'égalité entre deux Cellules
+     * @return Les deux cellules sont égales si elles ont les mêmes voisines et sont au même endroit du tableau
+     */
+    public boolean equals(Object c){
+        if(c instanceof Cellule){
+            Cellule cellule = (Cellule) c;
+            if((this.getX() == cellule.getX()) && (this.getY() == cellule.getY()) && (this.getVoisinBas() == cellule.getVoisinBas()) && (this.getVoisinDroit() == cellule.getVoisinDroit()) && (this.getVoisinGauche() == cellule.getVoisinGauche()) && (this.getVoisinHaut() == cellule.getVoisinHaut()) && (this.getValue() == cellule.getValue()) && (this.getPlayer() == cellule.getPlayer())) //Tous les arguments de la cellule
+                return true;
+        }
+        return false;
+    }
+}
