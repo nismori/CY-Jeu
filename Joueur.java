@@ -6,7 +6,7 @@ public final class Joueur{
     private final String name; 
     private int score;
     private static int N = 0;
-    private int x = -1;;
+    private int x = -1;
     private int y = -1;
     private int default_x = -1;
     private int default_y = -1;
@@ -58,7 +58,7 @@ public final class Joueur{
     }
 
 
-        /**
+    /**
      * Rajoute les coordonnées du Joueur dans le niveau
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -186,7 +186,7 @@ public final class Joueur{
      */
     public String toString(){
        String point = (this.score > 1) ? " pts" : " pt";
-       return (this.getName() + " : " + this.getScore() + point + " ; Nombre de vies : " + this.getLife() + " vie(s) ; Coordonnees : (" + this.x + "," + this.y + ")");
+       return (this.getName() + " : " + this.getScore() + point + " ; Nombre de vies : " + this.getLife() + " vie(s) ; Coordonnees : (" + this.y + "," + this.x + ")");
     }
 
 

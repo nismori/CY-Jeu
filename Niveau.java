@@ -27,8 +27,8 @@ public final class Niveau {
             this.niveau[i][0] = new Cellule('#');
             this.niveau[i][niveau[0].length-1]= new Cellule('#');
         }
-        for(int i=1; i<niveau.length-1d; i++){   
-            for(int j=1; j<niveau[0].length-1; j++){
+        for(int i=1; i<niveau.length-1; i++){   
+            for(int j=1; j<niveau[i].length-1; j++){
                 this.niveau[i][j] = new Cellule(' ');
             }
         }
@@ -69,8 +69,8 @@ public final class Niveau {
      * @param y coordonnée y
      */
     public void getPiece(int x, int y){
-        if(this.niveau[x][y].getValue() == '.'){
-            this.niveau[x][y].setValue(' ');
+        if(this.niveau[y][x].getValue() == '.'){
+            this.niveau[y][x].setValue(' ');
             this.joueur.addScore(1);
             this.nbPiece--;
         }
@@ -83,7 +83,7 @@ public final class Niveau {
      * @param y coordonnée y
      */
     public void getPiege(int x, int y){
-        if(this.niveau[x][y].getValue() == '*'){
+        if(this.niveau[y][x].getValue() == '*'){
             this.joueur.removeLife(1);
         }
     } 
@@ -96,7 +96,7 @@ public final class Niveau {
      * @return true si la case est un piège, false sinon
      */
     public boolean isPiege(int x, int y){
-        if(this.niveau[x][y].getValue() == '*')
+        if(this.niveau[y][x].getValue() == '*')
             return true;
         return false;
     }
@@ -134,8 +134,8 @@ public final class Niveau {
      * @return true si c'est le cas, false sinon
      */
     public boolean isPlayer(int x, int y){
-        if((x>=0 && x<this.niveau.length) && (y>=0 && y<this.niveau[0].length)){
-            if(this.niveau[x][y].getValue() != '#' && this.niveau[x][x].getValue() != '\0'){   
+        if((x>=0 && x<this.niveau[0].length) && (y>=0 && y<this.niveau.length)){
+            if((this.niveau[y][x].getValue() != '#' && this.niveau[y][x].getValue() != '\0') && this.niveau[y][x].getValue() != '*'){   
                 return true;
             }
         }
@@ -167,7 +167,7 @@ public final class Niveau {
      * @param x coordonnée x
      * @param y coordonnée y
      */
-    public void addPlayer(Joueur j, int x, int y) {
+    public void addPlayer(Joueur j, int y, int x) {
         try{
             if(!isPlayer(x,y))
                 throw new Exception();
@@ -176,7 +176,7 @@ public final class Niveau {
             this.getPiece(x,y);
             this.getPiege(x,y);
             this.joueur.setDefaultXandY(x,y);
-            this.niveau[x][y].setPlayer(); 
+            this.niveau[y][x].setPlayer(); 
         } 
         catch(Exception e){
             this.joueur = j;
@@ -189,16 +189,15 @@ public final class Niveau {
      * Si les coordonnées de placement du joueur ne sont pas conforme, on place le joueur sur la première case vide disponible. 
      */
     public void addPlayerDefault(){
-        int x = 0; int y = 0;
         for(int i=0; i<this.niveau.length; i++){
-            for(int j=0; j<this.niveau[0].length; j++){
+            for(int j=0; j<this.niveau[i].length; j++){
                 if(this.niveau[i][j].getValue() == ' '){
-                    this.joueur.addCoordonnees(x, y);
-                    this.getPiece(x, y);
-                    this.getPiege(x, y);
-                    this.joueur.setDefaultXandY(x,y);
-                    this.joueur.addCoordonnees(x, y);
-                    this.niveau[x][y].setPlayer(); 
+                    this.joueur.addCoordonnees(j,i);
+                    this.getPiece(j,i);
+                    this.getPiege(j,i);
+                    this.joueur.setDefaultXandY(j,i);
+                    this.joueur.addCoordonnees(j,i);
+                    this.niveau[i][j].setPlayer(); 
                     return;
                 }
             }
@@ -243,19 +242,19 @@ public final class Niveau {
             this.niveau = niveau;
 
             if (this.isNiveauExist()) {
-                this.addPlayer(joueur, 1, 1);
+                this.addPlayer(joueur, 3, 5);
                 this.setCoordonneeWithFile();
                 int compteur = this.numberOfPieces();
                 if(compteur>0){
                     this.nbPiece = compteur;
-                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].getValue() == '.'){
+                    if(this.niveau[this.getJoueur().getY()][this.getJoueur().getX()].getValue() == '.'){
                         this.joueur.addScore(1);
                         this.nbPiece--;
-                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].setPlayer();
+                        this.niveau[this.getJoueur().getY()][this.getJoueur().getX()].setPlayer();
                     }
-                    if(this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].getValue() == '*'){
+                    if(this.niveau[this.getJoueur().getY()][this.getJoueur().getX()].getValue() == '*'){
                         this.joueur.removeLife(1);
-                        this.niveau[this.getJoueur().getX()][this.getJoueur().getY()].setPlayer();
+                        this.niveau[this.getJoueur().getY()][this.getJoueur().getX()].setPlayer();
                     }
                 }
             } 
@@ -331,11 +330,11 @@ public final class Niveau {
     public void setCoordonneeWithFile(){
         Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[0].length; j++){
+            for(int j=0; j<tab[i].length; j++){
                 if(tab[i][j].getValue() == '1'){
-                    this.joueur.setX(i);
-                    this.joueur.setY(j);
-                    this.joueur.setDefaultXandY(i,j);
+                    this.joueur.setX(j);
+                    this.joueur.setY(i);
+                    this.joueur.setDefaultXandY(j,i);
                 }
             }
         }
@@ -350,7 +349,7 @@ public final class Niveau {
         int compteur = 0;
         Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[0].length; j++){
+            for(int j=0; j<tab[i].length; j++){
                 if(tab[i][j].getValue() == '.'){
                     compteur++;
                 }
@@ -368,7 +367,7 @@ public final class Niveau {
         int compteur = 0;
         Cellule[][] tab = this.niveau;
         for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[0].length; j++){
+            for(int j=0; j<tab[i].length; j++){
                 if(tab[i][j].getValue() == '.'){
                     compteur++;
                 }
@@ -396,7 +395,7 @@ public final class Niveau {
     public String toString(){
         String tab = "";
         for(int i=0; i<this.niveau.length; i++){
-            for(int j=0; j<this.niveau[0].length; j++){
+            for(int j=0; j<this.niveau[i].length; j++){
                 if(this.niveau[i][j].getPlayer() == '1')
                     tab += this.niveau[i][j].getPlayer();
                 else
@@ -418,7 +417,7 @@ public final class Niveau {
             Cellule[][] tab = getNiveau();
             if((this.niveau.length == tab.length) && (this.niveau[0].length == tab[0].length)){
                 for(int i=0; i<tab.length; i++){
-                    for(int j=0; j<tab[0].length; j++){
+                    for(int j=0; j<tab[i].length; j++){
                         if(this.niveau[i][j] != tab[i][j]){
                             return false;
                         }

@@ -29,7 +29,7 @@ public class Deplacement {
      * @param y Coordonnée y
      */
     public void setCoordonnees(int x, int y){
-        this.n.getNiveau()[x][y].setPlayer();
+        this.n.getNiveau()[y][x].setPlayer();
         this.n.getJoueur().addCoordonnees(x,y);
         this.x = x;
         this.y = y;
@@ -42,7 +42,7 @@ public class Deplacement {
      * @param y Coordonnée y
      */
     public void setClearPlayer(int x, int y){
-        this.n.getNiveau()[x][y].clearPlayer();
+        this.n.getNiveau()[y][x].clearPlayer();
     }
 
 
@@ -84,18 +84,6 @@ public class Deplacement {
     public void Movement(char commande){
         switch(commande){
         case 'Z':
-            if(this.n.isPlayer(x-1,y)){
-                this.n.getPiece(x-1, y);
-                this.n.getPiege(x-1, y);
-                this.setClearPlayer(x,y);
-                if(this.n.isPiege(x-1,y)){
-                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
-                }
-                else
-                    this.setCoordonnees(x-1,y);
-            }
-            break;
-        case 'Q':
             if(this.n.isPlayer(x,y-1)){
                 this.n.getPiece(x,y-1);
                 this.n.getPiege(x,y-1);
@@ -107,19 +95,19 @@ public class Deplacement {
                     this.setCoordonnees(x,y-1);
             }
             break;
-        case 'S':
-            if(this.n.isPlayer(x+1,y)){
-                this.n.getPiece(x+1,y);
-                this.n.getPiege(x+1, y);
+        case 'Q':
+            if(this.n.isPlayer(x-1,y)){
+                this.n.getPiece(x-1, y);
+                this.n.getPiege(x-1, y);
                 this.setClearPlayer(x,y);
-                if(this.n.isPiege(x+1,y)){
+                if(this.n.isPiege(x-1,y)){
                     this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                 }
                 else
-                    this.setCoordonnees(x+1,y);
+                    this.setCoordonnees(x-1,y);
             }
             break;
-        case 'D':
+        case 'S':
             if(this.n.isPlayer(x,y+1)){
                 this.n.getPiece(x,y+1);
                 this.n.getPiege(x,y+1);
@@ -129,6 +117,18 @@ public class Deplacement {
                 }
                 else
                     this.setCoordonnees(x,y+1);
+            }
+            break;
+        case 'D':
+            if(this.n.isPlayer(x+1,y)){
+                this.n.getPiece(x+1,y);
+                this.n.getPiege(x+1, y);
+                this.setClearPlayer(x,y);
+                if(this.n.isPiege(x+1,y)){
+                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                }
+                else
+                    this.setCoordonnees(x+1,y);
             }
             break;
         default:
