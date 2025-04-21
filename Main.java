@@ -14,11 +14,18 @@ public class Main {
      * @throws IOException En cas de problème de lecture
      */
     public static void main(String[] args) throws IOException{
-        Niveau n = new Niveau();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Entrez un nom de joueur : ");
         String name = reader.readLine().trim();
         Joueur j = new Joueur(name);
-        n.loadGame(j);
+        for(int i=1;i<6;i++){
+            Niveau n = new Niveau("Niveau" + i + ".txt", j, 1 , 1);
+            i = n.loadGame(i);
+            if(n.getJoueur().getLife() != 0 && i==5){
+                System.out.println(n);
+                System.out.println(n.getJoueur());
+                System.out.println("Merci d'avoir pris le temps de jouer à cette masterclass.");
+            }
+        }
     }
 }

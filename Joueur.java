@@ -2,12 +2,12 @@
  * Classe créant un <b>Joueur</b> avec un nom unique, un score positif ou nul et des coordonnées dans un <b>Niveau</b>
  * @author Victor
  */
-public final class Joueur{
+public class Joueur{
     private final String name; 
     private int score;
     private static int N = 0;
-    private int x = -1;
-    private int y = -1;
+    protected int x = -1;
+    protected int y = -1;
     private int default_x = -1;
     private int default_y = -1;
     private int life = 3;

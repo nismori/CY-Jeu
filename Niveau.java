@@ -14,36 +14,92 @@ public final class Niveau {
     private Joueur joueur;
     private int nbPiece = 4;
 
+
     /**
-     * Assigner les valeurs à la classe Cellule
+     * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score. On créé un niveau par défaut si le niveau n'est pas trouvé
+     * Le programme comble les cases non initialisées par des espaces ' '
+     * @param fileName Chemin absolu du fichier
+     * @param joueur Joueur à ajouter au niveau
      */
-    public Niveau(){
-        this.niveau = new Cellule[10][20];
-        for(int j=0; j<niveau[0].length; j++){
-            this.niveau[0][j] = new Cellule('#',j,0);
-            this.niveau[niveau.length-1][j] = new Cellule('#',j,niveau.length-1);
-        }
-        for(int i=0; i<niveau.length; i++){
-            this.niveau[i][0] = new Cellule('#',0,i);
-            this.niveau[i][niveau[0].length-1]= new Cellule('#',niveau[0].length-1,i);  
-        }
-        for(int i=1; i<niveau.length-1; i++){   
-            for(int j=1; j<niveau[i].length-1; j++){
-                this.niveau[i][j] = new Cellule(' ',j,i);
+    public Niveau(String fileName, Joueur joueur, int x, int y){
+        Path filePath = Paths.get(fileName);
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            
+            if (lines.isEmpty()) {
+                throw new IOException();
+            }
+
+            int cols = lines.size();
+            int max = lines.get(0).length();
+            for(int i = 1; i < cols; i++) {
+                if (lines.get(i).length() > max)
+                    max = lines.get(i).length();       
+            }
+            int rows = max;
+            Cellule[][] niveau = new Cellule[cols][rows];
+
+            for (int i = 0; i < cols; i++) {
+                String line = lines.get(i);
+                for(int j = 0; j < rows; j++){
+                    if(j<line.length())
+                        niveau[i][j] = new Cellule(line.charAt(j),j,i);
+                    else
+                        niveau[i][j] = new Cellule(' ',j,i);
+                }
+            }
+
+            this.niveau = niveau;
+            this.setVoisins();
+
+            if (this.isNiveauExist()){
+                boolean isPiece = false;
+
+                if(this.niveau[y][x].getValue() == '.')
+                    isPiece = true;
+                this.addPlayer(joueur, y, x);
+                this.setCoordonneeWithFile();
+                int compteur = this.numberOfPieces();
+                if(compteur>0)
+                    this.nbPiece = compteur;
+                if(isPiece)
+                    this.joueur.addScore(1);
+            } 
+            else{
+                throw new IOException();
             }
         }
+        catch (IOException e) {
+            System.err.println("Le fichier " + fileName + " est vide ou corrompu. Un niveau par défaut a été créé.");
+            this.niveau = new Cellule[10][20];
+            for(int j=0; j<niveau[0].length; j++){
+                this.niveau[0][j] = new Cellule('#',j,0);
+                this.niveau[niveau.length-1][j] = new Cellule('#',j,niveau.length-1);
+            }
+            for(int i=0; i<niveau.length; i++){
+                this.niveau[i][0] = new Cellule('#',0,i);
+                this.niveau[i][niveau[0].length-1]= new Cellule('#',niveau[0].length-1,i);  
+            }
+            for(int i=1; i<niveau.length-1; i++){   
+                for(int j=1; j<niveau[i].length-1; j++){
+                    this.niveau[i][j] = new Cellule(' ',j,i);
+                }
+            }
 
-        this.setVoisins();
+            this.setVoisins();
 
-        this.niveau[1][18].setValue('.');
-        this.niveau[1][1].setValue('.');
-        this.niveau[8][18].setValue('.');
-        this.niveau[8][1].setValue('.');
+            this.niveau[1][18].setValue('.');
+            this.niveau[1][1].setValue('.');
+            this.niveau[8][18].setValue('.');
+            this.niveau[8][1].setValue('.');
 
-        this.niveau[2][18].setValue('.');
-        this.niveau[1][2].setValue('.');
-        this.niveau[8][17].setValue('.');
-        this.niveau[8][2].setValue('.');
+            this.niveau[2][18].setValue('.');
+            this.niveau[1][2].setValue('.');
+            this.niveau[8][17].setValue('.');
+            this.niveau[8][2].setValue('.');
+
+            this.addPlayer(joueur,5,5);
+        }
     }
 
     /**
@@ -65,7 +121,7 @@ public final class Niveau {
     public Joueur getJoueur(){
         return this.joueur;
     }
-
+    
 
     /**
      * Permet de récupérer le Niveau d'un objet niveau. Permet de traiter des cas particuliers comme equals().
@@ -218,70 +274,6 @@ public final class Niveau {
         System.exit(1);
     }
 
-    
-    /**
-     * Charge un niveau seulement à partir d'un fichier. Similaire à loadFile mais sans la notion de vie et de score. On créé un niveau par défaut si le niveau n'est pas trouvé
-     * Le programme comble les cases non initialisées par des espaces ' '
-     * @param fileName Chemin absolu du fichier
-     * @param joueur Joueur à ajouter au niveau
-     */
-    public void loadNiveau(String fileName, Joueur joueur){
-        Path filePath = Paths.get(fileName);
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            
-            if (lines.isEmpty()) {
-                throw new IOException();
-            }
-
-            int cols = lines.size();
-            int max = lines.get(0).length();
-            for(int i = 1; i < cols; i++) {
-                if (lines.get(i).length() > max)
-                    max = lines.get(i).length();       
-            }
-            int rows = max;
-            Cellule[][] niveau = new Cellule[cols][rows];
-
-            for (int i = 0; i < cols; i++) {
-                String line = lines.get(i);
-                for(int j = 0; j < rows; j++){
-                    if(j<line.length())
-                        niveau[i][j] = new Cellule(line.charAt(j),j,i);
-                    else
-                        niveau[i][j] = new Cellule(' ',j,i);
-                }
-            }
-
-            this.niveau = niveau;
-            this.setVoisins();
-
-            if (this.isNiveauExist()){
-                int y=1; int x = 1; //A changer pour changer le lieu de spawn du joueur 
-                boolean isPiece = false;
-
-                if(this.niveau[y][x].getValue() == '.')
-                    isPiece = true;
-                this.addPlayer(joueur, y, x);
-                this.setCoordonneeWithFile();
-                int compteur = this.numberOfPieces();
-                if(compteur>0)
-                    this.nbPiece = compteur;
-                if(isPiece)
-                    this.joueur.addScore(1);
-            } 
-            else{
-                throw new IOException();
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Le fichier " + fileName + " est vide ou corrompu. Un niveau par défaut a été créé.");
-            Niveau n = new Niveau();
-            this.niveau = n.niveau;
-            this.addPlayer(joueur,5,5);
-        }
-    }
-
 
     /**
      * Demande à l'utilisateur s'il veut rejouer. Le N correspond à n'importe quelle touche c'est normal, on a ce système dans plusieurs jeux
@@ -308,32 +300,24 @@ public final class Niveau {
      * @param j Joueur à ajouter au niveau
      * @throws IOException En cas de problème de lecture
      */
-    public void loadGame(Joueur j) throws IOException{
-        for(int i=1;i<6;i++){
-            this.loadNiveau("Niveau" + i + ".txt", j);
-            this.nbPiece = numberOfPieces();
-            Deplacement d = new Deplacement(this);
-            d.Movement(1000,null);
-            if(this.joueur.getLife()==0){
-                if(Retry()){
-                    i = 0;
-                    this.joueur.setLife(3);
-                    this.joueur.resetScore();
-                    d.clear();
-                    continue;
-                }
-                else
-                    System.out.println("Merci d'avoir pris le temps de jouer à cette masterclass.");
-                    break;
+    public int loadGame(int i) throws IOException{
+        this.nbPiece = numberOfPieces();
+        Deplacement d = new Deplacement(this);
+        d.Movement(1000,null);
+        if(this.joueur.getLife()==0){
+            if(Retry()){
+                this.joueur.setLife(3);
+                this.joueur.resetScore();
+                d.clear();
+                return 1;
+            }
+            else{
+                System.out.println("Merci d'avoir pris le temps de jouer à cette masterclass.");
+                return -1;
             }
         }
-        if(this.joueur.getLife() != 0){
-            System.out.println(this);
-            System.out.println(this.getJoueur());
-            System.out.println("Merci d'avoir pris le temps de jouer à cette masterclass.");
-        }
+        return i;
     }
-
 
 
     /**

@@ -83,64 +83,64 @@ public class Deplacement {
     public void Movement(char commande){
         int newX = -1; int newY = -1;
         switch(commande){
-        case 'Z':
-            newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
-            newY = this.n.getNiveau()[y][x].getVoisinHaut().getY();
-            if(this.n.isPlayer(newX,newY)){
-                this.n.getPiece(newX,newY);
-                this.n.getPiege(newX,newY);
-                this.setClearPlayer(x,y);
-                if(this.n.isPiege(newX,newY)){
-                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+            case 'Z':
+                newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
+                newY = this.n.getNiveau()[y][x].getVoisinHaut().getY();
+                if(this.n.isPlayer(newX,newY)){
+                    this.n.getPiece(newX,newY);
+                    this.n.getPiege(newX,newY);
+                    this.setClearPlayer(x,y);
+                    if(this.n.isPiege(newX,newY)){
+                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                    }
+                    else
+                        this.setCoordonnees(newX,newY);
                 }
-                else
-                    this.setCoordonnees(newX,newY);
-            }
-            break;
-        case 'Q':
-            newX = this.n.getNiveau()[y][x].getVoisinGauche().getX();
-            newY = this.n.getNiveau()[y][x].getVoisinGauche().getY();
-            if(this.n.isPlayer(newX,newY)){
-                this.n.getPiece(newX,newY);
-                this.n.getPiege(newX,newY);
-                this.setClearPlayer(x,y);
-                if(this.n.isPiege(newX,newY)){
-                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                break;
+            case 'Q':
+                newX = this.n.getNiveau()[y][x].getVoisinGauche().getX();
+                newY = this.n.getNiveau()[y][x].getVoisinGauche().getY();
+                if(this.n.isPlayer(newX,newY)){
+                    this.n.getPiece(newX,newY);
+                    this.n.getPiege(newX,newY);
+                    this.setClearPlayer(x,y);
+                    if(this.n.isPiege(newX,newY)){
+                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                    }
+                    else
+                        this.setCoordonnees(newX,newY);
                 }
-                else
-                    this.setCoordonnees(newX,newY);
-            }
-            break;
-        case 'S':
-            newX = this.n.getNiveau()[y][x].getVoisinBas().getX();
-            newY = this.n.getNiveau()[y][x].getVoisinBas().getY();
-            if(this.n.isPlayer(newX,newY)){
-                this.n.getPiece(newX,newY);
-                this.n.getPiege(newX,newY);
-                this.setClearPlayer(x,y);
-                if(this.n.isPiege(newX,newY)){
-                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                break;
+            case 'S':
+                newX = this.n.getNiveau()[y][x].getVoisinBas().getX();
+                newY = this.n.getNiveau()[y][x].getVoisinBas().getY();
+                if(this.n.isPlayer(newX,newY)){
+                    this.n.getPiece(newX,newY);
+                    this.n.getPiege(newX,newY);
+                    this.setClearPlayer(x,y);
+                    if(this.n.isPiege(newX,newY)){
+                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                    }
+                    else
+                        this.setCoordonnees(newX,newY);
                 }
-                else
-                    this.setCoordonnees(newX,newY);
-            }
-            break;
-        case 'D':
-            newX = this.n.getNiveau()[y][x].getVoisinDroit().getX();
-            newY = this.n.getNiveau()[y][x].getVoisinDroit().getY();
-            if(this.n.isPlayer(newX,newY)){
-                this.n.getPiece(newX,newY);
-                this.n.getPiege(newX,newY);
-                this.setClearPlayer(x,y);
-                if(this.n.isPiege(newX,newY)){
-                    this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                break;
+            case 'D':
+                newX = this.n.getNiveau()[y][x].getVoisinDroit().getX();
+                newY = this.n.getNiveau()[y][x].getVoisinDroit().getY();
+                if(this.n.isPlayer(newX,newY)){
+                    this.n.getPiece(newX,newY);
+                    this.n.getPiege(newX,newY);
+                    this.setClearPlayer(x,y);
+                    if(this.n.isPiege(newX,newY)){
+                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                    }
+                    else
+                        this.setCoordonnees(newX,newY);
                 }
-                else
-                    this.setCoordonnees(newX,newY);
-            }
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
         }
     }
 
