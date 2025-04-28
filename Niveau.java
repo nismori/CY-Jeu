@@ -37,19 +37,19 @@ public final class Niveau {
                     max = lines.get(i).length();       
             }
             int rows = max;
-            Cellule[][] niveau = new Cellule[cols][rows];
+            Cellule[][] n = new Cellule[cols][rows];
 
             for (int i = 0; i < cols; i++) {
                 String line = lines.get(i);
                 for(int j = 0; j < rows; j++){
                     if(j<line.length())
-                        niveau[i][j] = new Cellule(line.charAt(j),j,i);
+                        n[i][j] = new Cellule(line.charAt(j),j,i);
                     else
-                        niveau[i][j] = new Cellule(' ',j,i);
+                        n[i][j] = new Cellule(' ',j,i);
                 }
             }
 
-            this.niveau = niveau;
+            this.niveau = n;
             this.setVoisins();
 
             if (this.isNiveauExist()){
@@ -106,9 +106,9 @@ public final class Niveau {
      * Créé les voisins pour chaque cellule du tableau du Niveau.
      */
     public void setVoisins(){
-        for(int i=0; i<niveau.length; i++){   
-            for(int j=0; j<niveau[i].length; j++){
-                this.niveau[i][j].setVoisins(niveau);
+        for (Cellule[] niveau1 : niveau) {
+            for (Cellule niveau11 : niveau1) {
+                niveau11.setVoisins(niveau);
             }
         }
     }
@@ -166,9 +166,7 @@ public final class Niveau {
      * @return true si la case est un piège, false sinon
      */
     public boolean isPiege(int x, int y){
-        if(this.niveau[y][x].getValue() == '*')
-            return true;
-        return false;
+        return this.niveau[y][x].getValue() == '*';
     }
 
     
@@ -177,10 +175,7 @@ public final class Niveau {
      * @return S'il n'y a plus de pièce dans le niveau, on renvoie true, sinon on renvoie false
      */
     public boolean isFinishPiece(){
-        if(this.nbPiece == 0){
-            return true;
-        }
-        return false;
+        return this.nbPiece == 0;
     }
 
 
@@ -189,10 +184,7 @@ public final class Niveau {
      * @return Si le joueur n'a plus de vies, on renvoie true, sinon on renvoie false
      */
     public boolean isFinishPiege(){
-        if(this.joueur.getLife() == 0){
-            return true;
-        }
-        return false;
+        return this.joueur.getLife() == 0;
     }
     
 
@@ -204,10 +196,7 @@ public final class Niveau {
      * @return true si c'est le cas, false sinon
      */
     public boolean isPlayer(int x, int y){
-        if(this.niveau[y][x].getValue() != '#' && this.niveau[y][x].getValue() != '\0'){   
-            return true;
-        }
-        return false;
+        return this.niveau[y][x].getValue() != '#' && this.niveau[y][x].getValue() != '\0';
     }
 
 
@@ -217,12 +206,7 @@ public final class Niveau {
      * @return true si x vaut 0, false sinon
      */
     public Boolean intToBoolean(int x){
-        if(x==0){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return x != 0;
     }
 
 
@@ -286,10 +270,7 @@ public final class Niveau {
         System.out.print("Voulez-vous rejouer (O/N) ? ");
         String input = reader.readLine().trim().toUpperCase();
         char answer = input.isEmpty() ? '\0' : input.charAt(0);
-        if(answer == 'o' || answer == 'O')
-            return true;
-        else
-            return false;
+        return answer == 'o' || answer == 'O';
     }
 
 
@@ -344,9 +325,9 @@ public final class Niveau {
     public int numberOfPieces(){
         int compteur = 0;
         Cellule[][] tab = this.niveau;
-        for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[i].length; j++){
-                if(tab[i][j].getValue() == '.'){
+        for (Cellule[] tab1 : tab) {
+            for (Cellule tab11 : tab1) {
+                if (tab11.getValue() == '.') {
                     compteur++;
                 }
             }
@@ -362,9 +343,9 @@ public final class Niveau {
     public int numberOfPieges(){
         int compteur = 0;
         Cellule[][] tab = this.niveau;
-        for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[i].length; j++){
-                if(tab[i][j].getValue() == '.'){
+        for (Cellule[] tab1 : tab) {
+            for (Cellule tab11 : tab1) {
+                if (tab11.getValue() == '.') {
                     compteur++;
                 }
             }
@@ -378,24 +359,23 @@ public final class Niveau {
      * @return Si c'est le cas, on retourne true
      */
     public boolean isNiveauExist(){
-        if(this.niveau.length > 0 && this.niveau[0].length > 0){
-            return true;
-        }
-        return false;
+        return this.niveau.length > 0 && this.niveau[0].length > 0;
     }
 
 
     /**
      * Affiche le Niveau en affichant le tableau niveau sous forme de String
      */
+    @Override
     public String toString(){
         String tab = "";
-        for(int i=0; i<this.niveau.length; i++){
-            for(int j=0; j<this.niveau[i].length; j++){
-                if(this.niveau[i][j].getPlayer() == '1')
-                    tab += this.niveau[i][j].getPlayer();
-                else
-                    tab += this.niveau[i][j].getValue();
+        for (Cellule[] niveau1 : this.niveau) {
+            for (Cellule niveau11 : niveau1) {
+                if (niveau11.getPlayer() == '1') {
+                    tab += niveau11.getPlayer();
+                } else {
+                    tab += niveau11.getValue();
+                }
             }
             tab += '\n';
         }
@@ -403,15 +383,29 @@ public final class Niveau {
     }
 
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        for (Cellule[] niveau1 : niveau) {
+            for (Cellule niveau11 : niveau1) {
+                result = 31 * result + (niveau11 != null ? niveau11.hashCode() : 0);
+            }
+        }
+        result = 31 * result + (joueur != null ? joueur.hashCode() : 0);
+        return result;
+    }
+
+
+
     /**
      * Vérifie que deux Niveau sont égaux en vérifiant s'ils ont le meme objet et tableau 
      * @param niv Un Niveau
      * @return true si les deux niveaux sont identiques, false sinon
      */
+    @Override
     public boolean equals(Object niv){
-        if(niv instanceof Niveau){
-            Niveau niveau = (Niveau) niv;
-            Cellule[][] tab = niveau.getNiveau();
+        if(niv instanceof Niveau n){
+            Cellule[][] tab = n.getNiveau();
             if((this.niveau.length == tab.length) && (this.niveau[0].length == tab[0].length)){
                 for(int i=0; i<tab.length; i++){
                     for(int j=0; j<tab[i].length; j++){
