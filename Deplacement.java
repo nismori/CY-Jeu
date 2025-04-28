@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
  * @author Victor
  */
 public class Deplacement {
-    private Niveau n;
+    private final Niveau n;
     private int x = -1;
     private int y = -1;
 
@@ -81,9 +81,9 @@ public class Deplacement {
      * @param commande un caractère parmi {'Z','Q','S','D'}
      */
     public void Movement(char commande){
-        int newX = -1; int newY = -1;
+        int newX; int newY;
         switch(commande){
-            case 'Z':
+            case 'Z' -> {
                 newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
                 newY = this.n.getNiveau()[y][x].getVoisinHaut().getY();
                 if(this.n.isPlayer(newX,newY)){
@@ -96,8 +96,8 @@ public class Deplacement {
                     else
                         this.setCoordonnees(newX,newY);
                 }
-                break;
-            case 'Q':
+            }
+            case 'Q' -> {
                 newX = this.n.getNiveau()[y][x].getVoisinGauche().getX();
                 newY = this.n.getNiveau()[y][x].getVoisinGauche().getY();
                 if(this.n.isPlayer(newX,newY)){
@@ -110,8 +110,8 @@ public class Deplacement {
                     else
                         this.setCoordonnees(newX,newY);
                 }
-                break;
-            case 'S':
+            }
+            case 'S' -> {
                 newX = this.n.getNiveau()[y][x].getVoisinBas().getX();
                 newY = this.n.getNiveau()[y][x].getVoisinBas().getY();
                 if(this.n.isPlayer(newX,newY)){
@@ -124,8 +124,8 @@ public class Deplacement {
                     else
                         this.setCoordonnees(newX,newY);
                 }
-                break;
-            case 'D':
+            }
+            case 'D' -> {
                 newX = this.n.getNiveau()[y][x].getVoisinDroit().getX();
                 newY = this.n.getNiveau()[y][x].getVoisinDroit().getY();
                 if(this.n.isPlayer(newX,newY)){
@@ -138,9 +138,9 @@ public class Deplacement {
                     else
                         this.setCoordonnees(newX,newY);
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 

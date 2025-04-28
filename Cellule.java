@@ -20,23 +20,13 @@ public class Cellule {
     public Cellule(char c, int x, int y){
         this.x = x;
         this.y = y;
-        switch(c){
-            case(' '):
-                caractere = ' ';
-                break;
-            case('*'):
-                caractere = '*';
-                break;
-            case('.'):
-                caractere = '.';
-                break;
-            case('#'):
-                caractere = '#';
-                break;
-            default:
-                caractere = ' ';
-                break;
-        }
+        caractere = switch (c) {
+            case (' ') -> ' ';
+            case ('*') -> '*';
+            case ('.') -> '.';
+            case ('#') -> '#';
+            default -> ' ';
+        };
     }
 
     /**
@@ -170,6 +160,7 @@ public class Cellule {
     /**
      * Affiche le caractère contenu par la cellule
      */
+    @Override
     public String toString(){
         return String.valueOf(caractere);
     }
@@ -179,12 +170,27 @@ public class Cellule {
      * Vérifie l'égalité entre deux Cellules
      * @return Les deux cellules sont égales si elles ont les mêmes voisines et sont au même endroit du tableau
      */
+    @Override
     public boolean equals(Object c){
-        if(c instanceof Cellule){
-            Cellule cellule = (Cellule) c;
+        if(c instanceof Cellule cellule){
             if((this.getX() == cellule.getX()) && (this.getY() == cellule.getY()) && (this.getVoisinBas() == cellule.getVoisinBas()) && (this.getVoisinDroit() == cellule.getVoisinDroit()) && (this.getVoisinGauche() == cellule.getVoisinGauche()) && (this.getVoisinHaut() == cellule.getVoisinHaut()) && (this.getValue() == cellule.getValue()) && (this.getPlayer() == cellule.getPlayer())) //Tous les arguments de la cellule
                 return true;
         }
         return false;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + Character.hashCode(caractere);
+        result = 31 * result + Character.hashCode(joueur);
+        result = 31 * result + Integer.hashCode(x);
+        result = 31 * result + Integer.hashCode(y);
+        result = 31 * result + (VGauche != null ? VGauche.hashCode() : 0);
+        result = 31 * result + (VDroit != null ? VDroit.hashCode() : 0);
+        result = 31 * result + (VHaut != null ? VHaut.hashCode() : 0);
+        result = 31 * result + (VBas != null ? VBas.hashCode() : 0);
+        return result;
     }
 }

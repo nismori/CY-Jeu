@@ -184,6 +184,7 @@ public class Joueur{
     /**
      * Affiche le nom, le score, le nombre de vie(s) et les coordonnées x et y sous la forme nom : <i>score</i> pts ; Nombre de vies : <i>life</i> vie(s) Coordonnees : <i>(x,y)</i> 
      */
+    @Override
     public String toString(){
        String point = (this.score > 1) ? " pts" : " pt";
        return (this.getName() + " : " + this.getScore() + point + " ; Nombre de vies : " + this.getLife() + " vie(s) ; Coordonnees : (" + this.y + "," + this.x + ")");
@@ -195,13 +196,28 @@ public class Joueur{
      * @param joueur Joueur à comparer
      * @return true si les noms des Joueurs sont identiques, false sinon
      */
+    @Override
     public boolean equals(Object joueur){
-        if(joueur instanceof Joueur){
-            Joueur j = (Joueur) joueur;
+        if(joueur instanceof Joueur j){
             if(this.getName().equalsIgnoreCase(j.getName())){
                 return true;
             }
         }
         return false;
     }
+
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + Integer.hashCode(score);
+        result = 31 * result + Integer.hashCode(x);
+        result = 31 * result + Integer.hashCode(y);
+        result = 31 * result + Integer.hashCode(default_x);
+        result = 31 * result + Integer.hashCode(default_y);
+        result = 31 * result + Integer.hashCode(life);
+        return result;
+    }
+
 }
