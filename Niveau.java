@@ -12,6 +12,7 @@ import java.util.List;
 public final class Niveau {
     private Cellule[][] niveau;
     private Joueur joueur;
+    private Ennemi ennemi;
     private int nbPiece = 4;
 
 
@@ -21,8 +22,9 @@ public final class Niveau {
      * @param fileName Chemin absolu du fichier
      * @param joueur Joueur à ajouter au niveau
      */
-    public Niveau(String fileName, Joueur joueur, int x, int y){
+    public Niveau(String fileName, Joueur joueur, Ennemi ennemi, int x, int y){
         Path filePath = Paths.get(fileName);
+        this.ennemi = ennemi;
         try {
             List<String> lines = Files.readAllLines(filePath);
             
@@ -120,6 +122,15 @@ public final class Niveau {
      */
     public Joueur getJoueur(){
         return this.joueur;
+    }
+
+
+    /**
+     * Permet de récupérer l'Ennemi d'un objet Niveau
+     * @return L'objet Ennemi dans le Niveau en paramètre
+     */
+    public Ennemi getEnnemi(){
+        return this.ennemi;
     }
     
 

@@ -156,6 +156,7 @@ public class Deplacement {
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
+            this.n.getEnnemi().Test();
             if(this.n.isFinishPiece()){
                 clear();
                 break;

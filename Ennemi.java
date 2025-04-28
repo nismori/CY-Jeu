@@ -5,4 +5,9 @@ public class Ennemi extends Joueur{
         this.x = x;
         this.y = y;
     }
+
+
+    public void Test(){
+        System.out.println(super.getName());
+    }
 }   

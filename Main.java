@@ -18,8 +18,9 @@ public class Main {
         System.out.print("Entrez un nom de joueur : ");
         String name = reader.readLine().trim();
         Joueur j = new Joueur(name);
+        Ennemi e = new Ennemi("Everybody wants to be my ennemy",0,0);
         for(int i=1;i<6;i++){
-            Niveau n = new Niveau("Niveau" + i + ".txt", j, 1 , 1);
+            Niveau n = new Niveau("Niveau" + i + ".txt", j, e, 1 , 1);
             i = n.loadGame(i);
             if(n.getJoueur().getLife() != 0 && i==5){
                 System.out.println(n);
