@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
  * @author Victor
  */
 public class Deplacement {
-    private Niveau n;
+    private final Niveau n;
     private int x = -1;
     private int y = -1;
 
@@ -83,7 +83,7 @@ public class Deplacement {
      */
     public void Movement(char commande){
         switch(commande){
-        case 'Z':
+        case 'Z' -> {
             if(this.n.isPlayer(x-1,y)){
                 this.n.getPiece(x-1, y);
                 this.n.getPiege(x-1, y);
@@ -95,8 +95,8 @@ public class Deplacement {
                 else
                     this.setCoordonnees(x-1,y);
             }
-            break;
-        case 'Q':
+            }
+        case 'Q' -> {
             if(this.n.isPlayer(x,y-1)){
                 this.n.getPiece(x,y-1);
                 this.n.getPiege(x,y-1);
@@ -108,8 +108,8 @@ public class Deplacement {
                 else
                     this.setCoordonnees(x,y-1);
             }
-            break;
-        case 'S':
+            }
+        case 'S' -> {
             if(this.n.isPlayer(x+1,y)){
                 this.n.getPiece(x+1,y);
                 this.n.getPiege(x+1, y);
@@ -121,8 +121,8 @@ public class Deplacement {
                 else
                     this.setCoordonnees(x+1,y);
             }
-            break;
-        case 'D':
+            }
+        case 'D' -> {
             if(this.n.isPlayer(x,y+1)){
                 this.n.getPiece(x,y+1);
                 this.n.getPiege(x,y+1);
@@ -134,9 +134,9 @@ public class Deplacement {
                 else
                     this.setCoordonnees(x,y+1);
             }
-            break;
-        default:
-            break;
+            }
+        default -> {
+            }
         }
     }
 
@@ -163,9 +163,10 @@ public class Deplacement {
                     System.out.println("VICTOIRE");
                     System.exit(0);
                 }
-                else
+                else{
                     clear();
                     break;
+                }
             }
             if(this.n.isFinishPiege()){
                 if(fileName != null){

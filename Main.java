@@ -10,6 +10,7 @@ public class Main {
     /**
      * Méthode pour afficher les commandes demandés dans les anciens niveaux
      */
+    @SuppressWarnings("unlikely-arg-type")
     public static void oldCommands(){
         Joueur j1 = new Joueur("Alice");
         Joueur j2 = new Joueur("Bob");
@@ -47,7 +48,7 @@ public class Main {
      * @throws IOException En cas de problème de lecture
      */
     public static void main(String[] args) throws IOException{
-        String fileName = null;
+        String fileName;
         Niveau n = new Niveau();
 
         //oldCommands(j1,j2,j3,b,j4,n1,n2,n3);
