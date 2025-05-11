@@ -82,7 +82,7 @@ public class Cellule {
      * Cette méthode récupère le caractère représentant le joueur.
      * @return le caractère représentant le joueur
      */
-    public char getPlayer(){
+    public char getJoueur(){
         return this.joueur;
     }
 
@@ -90,15 +90,20 @@ public class Cellule {
     /**
      * Cette méthode permet d'ajouter le joueur à la case.
      */
-    public void setPlayer(){
+    public void setJoueur(){
         this.joueur = '1';
+    }
+
+
+    public void setEnnemi(){
+        this.
     }
 
 
     /**
      * Cette méthode permet de supprimer le joueur de la case.
      */
-    public void clearPlayer(){
+    public void clearJoueur(){
         this.joueur = ' ';
     }
 
@@ -173,7 +178,7 @@ public class Cellule {
     @Override
     public boolean equals(Object c){
         if(c instanceof Cellule cellule){
-            if((this.getX() == cellule.getX()) && (this.getY() == cellule.getY()) && (this.getVoisinBas() == cellule.getVoisinBas()) && (this.getVoisinDroit() == cellule.getVoisinDroit()) && (this.getVoisinGauche() == cellule.getVoisinGauche()) && (this.getVoisinHaut() == cellule.getVoisinHaut()) && (this.getValue() == cellule.getValue()) && (this.getPlayer() == cellule.getPlayer())) //Tous les arguments de la cellule
+            if((this.getX() == cellule.getX()) && (this.getY() == cellule.getY()) && (this.getVoisinBas() == cellule.getVoisinBas()) && (this.getVoisinDroit() == cellule.getVoisinDroit()) && (this.getVoisinGauche() == cellule.getVoisinGauche()) && (this.getVoisinHaut() == cellule.getVoisinHaut()) && (this.getValue() == cellule.getValue()) && (this.getJoueur() == cellule.getJoueur())) //Tous les arguments de la cellule
                 return true;
         }
         return false;

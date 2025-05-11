@@ -12,7 +12,7 @@ import java.util.List;
 public final class Niveau {
     private Cellule[][] niveau;
     private Joueur joueur;
-    private Ennemi ennemi;
+    private List<Ennemi> tabEnnemis;
     private int nbPiece = 4;
 
 
@@ -24,7 +24,7 @@ public final class Niveau {
      */
     public Niveau(String fileName, Joueur joueur, Ennemi ennemi, int x, int y){
         Path filePath = Paths.get(fileName);
-        this.ennemi = ennemi;
+        this.tabEnnemis.add(ennemi);
         try {
             List<String> lines = Files.readAllLines(filePath);
             
@@ -126,11 +126,11 @@ public final class Niveau {
 
 
     /**
-     * Permet de récupérer l'Ennemi d'un objet Niveau
-     * @return L'objet Ennemi dans le Niveau en paramètre
+     * Permet de récupérer les Ennemi d'un objet Niveau
+     * @return Une liste des objets Ennemi dans le Niveau
      */
-    public Ennemi getEnnemi(){
-        return this.ennemi;
+    public List<Ennemi> getTabEnnemis(){
+        return this.tabEnnemis;
     }
     
 
@@ -239,7 +239,7 @@ public final class Niveau {
             this.getPiece(x,y);
             this.getPiege(x,y);
             this.joueur.setDefaultXandY(x,y);
-            this.niveau[y][x].setPlayer(); 
+            this.niveau[y][x].setJoueur(); 
         } 
         catch(Exception e){
             this.joueur = j;
@@ -260,7 +260,7 @@ public final class Niveau {
                     this.getPiege(j,i);
                     this.joueur.setDefaultXandY(j,i);
                     this.joueur.addCoordonnees(j,i);
-                    this.niveau[i][j].setPlayer(); 
+                    this.niveau[i][j].setJoueur();
                     return;
                 }
             }
@@ -382,8 +382,8 @@ public final class Niveau {
         String tab = "";
         for (Cellule[] niveau1 : this.niveau) {
             for (Cellule niveau11 : niveau1) {
-                if (niveau11.getPlayer() == '1') {
-                    tab += niveau11.getPlayer();
+                if (niveau11.getJoueur() == '1') {
+                    tab += niveau11.getJoueur();
                 } else {
                     tab += niveau11.getValue();
                 }

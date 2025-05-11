@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Classe permettant de déplacer le <b>Joueur</b> dans le <b>Niveau</b>
@@ -8,6 +10,8 @@ import java.io.InputStreamReader;
  */
 public class Deplacement {
     private final Niveau n;
+    private final List<Ennemi> tabEnnemis;
+    private final Joueur j;
     private int x = -1;
     private int y = -1;
 
@@ -18,8 +22,8 @@ public class Deplacement {
      */
     public Deplacement(Niveau niveau){
         this.n = niveau;
-        this.x = niveau.getJoueur().getX();
-        this.y = niveau.getJoueur().getY();
+        this.tabEnnemis = niveau.getTabEnnemis();
+        this.j = niveau.getJoueur();
     }
     
 
@@ -28,9 +32,22 @@ public class Deplacement {
      * @param x Coordonnée x
      * @param y Coordonnée y
      */
-    public void setCoordonnees(int x, int y){
-        this.n.getNiveau()[y][x].setPlayer();
-        this.n.getJoueur().addCoordonnees(x,y);
+    public void setJoueurCoordonnees(int x, int y){
+        this.n.getNiveau()[y][x].setJoueur();
+        this.j.addCoordonnees(x,y);
+        this.x = x;
+        this.y = y;
+    }
+
+
+    /**
+     * Permet de modifier les coordonnées et l'affichage du <b>Joueur</b> dans le <b>Niveau</b>
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     */
+    public void setEnnemiCoordonnees(int x, int y, Ennemi e){
+        this.n.getNiveau()[y][x].setEnnemi();
+        e.addCoordonnees(x,y);
         this.x = x;
         this.y = y;
     }
@@ -41,8 +58,8 @@ public class Deplacement {
      * @param x Coordonnée x
      * @param y Coordonnée y
      */
-    public void setClearPlayer(int x, int y){
-        this.n.getNiveau()[y][x].clearPlayer();
+    public void setClearJoueur(int x, int y){
+        this.n.getNiveau()[y][x].clearJoueur();
     }
 
 
@@ -63,14 +80,14 @@ public class Deplacement {
      * Récupère un caractère avec <i>getCaractere</i> et l'envoie à Movement(char commande) qui va l'interpréter
      * @throws IOException En cas de problème de lecture du caractère
      */
-    public void Movement() throws IOException{
+    public void joueurMovement() throws IOException{
         char caractere = getCaractere();
         while((caractere != 'Z' && caractere != 'Q') && (caractere != 'S' && caractere != 'D')){
             if(caractere != '\n')
                 System.out.println("Votre caractère entré, '" + caractere + "' , n'est pas un des caractères de déplacement Z/Q/S/D.");
             caractere = getCaractere();
         }
-        Movement(caractere);
+        joueurMovement(caractere);
     }
 
 
@@ -80,8 +97,10 @@ public class Deplacement {
      * On renvoie le Joueur à sa position par défaut s'il tombe sur un piège, calculée lors du lancement du programme. On lui fait aussi perdre une vie
      * @param commande un caractère parmi {'Z','Q','S','D'}
      */
-    public void Movement(char commande){
+    public void joueurMovement(char commande){
         int newX; int newY;
+        this.x = j.getX();
+        this.y = j.getY();
         switch(commande){
             case 'Z' -> {
                 newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
@@ -89,12 +108,12 @@ public class Deplacement {
                 if(this.n.isPlayer(newX,newY)){
                     this.n.getPiece(newX,newY);
                     this.n.getPiege(newX,newY);
-                    this.setClearPlayer(x,y);
+                    this.setClearJoueur(x,y);
                     if(this.n.isPiege(newX,newY)){
-                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                        this.setJoueurCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                     }
                     else
-                        this.setCoordonnees(newX,newY);
+                        this.setJoueurCoordonnees(newX,newY);
                 }
             }
             case 'Q' -> {
@@ -103,12 +122,12 @@ public class Deplacement {
                 if(this.n.isPlayer(newX,newY)){
                     this.n.getPiece(newX,newY);
                     this.n.getPiege(newX,newY);
-                    this.setClearPlayer(x,y);
+                    this.setClearJoueur(x,y);
                     if(this.n.isPiege(newX,newY)){
-                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                        this.setJoueurCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                     }
                     else
-                        this.setCoordonnees(newX,newY);
+                        this.setJoueurCoordonnees(newX,newY);
                 }
             }
             case 'S' -> {
@@ -117,12 +136,12 @@ public class Deplacement {
                 if(this.n.isPlayer(newX,newY)){
                     this.n.getPiece(newX,newY);
                     this.n.getPiege(newX,newY);
-                    this.setClearPlayer(x,y);
+                    this.setClearJoueur(x,y);
                     if(this.n.isPiege(newX,newY)){
-                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                        this.setJoueurCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                     }
                     else
-                        this.setCoordonnees(newX,newY);
+                        this.setJoueurCoordonnees(newX,newY);
                 }
             }
             case 'D' -> {
@@ -131,17 +150,49 @@ public class Deplacement {
                 if(this.n.isPlayer(newX,newY)){
                     this.n.getPiece(newX,newY);
                     this.n.getPiege(newX,newY);
-                    this.setClearPlayer(x,y);
+                    this.setClearJoueur(x,y);
                     if(this.n.isPiege(newX,newY)){
-                        this.setCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
+                        this.setJoueurCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY());
                     }
                     else
-                        this.setCoordonnees(newX,newY);
+                        this.setJoueurCoordonnees(newX,newY);
                 }
             }
             default -> {
             }
         }
+    }
+
+
+    public void ennemisMovement(){
+        for(int i=0; i<tabEnnemis.size(); i++){
+            ennemiMovement(tabEnnemis.get(i));
+        }
+    }
+    
+
+    public void ennemiMovement(Ennemi e){
+        this.x = e.getX();
+        this.y = e.getY();
+        Random rand = new Random();
+        Integer direction = rand.nextInt(3);
+        int newX; int newY;
+        switch(direction){
+            case 0 -> {
+                newX = this.n.getNiveau()[y][x].getVoisinHaut().getX();
+                newY = this.n.getNiveau()[y][x].getVoisinHaut().getY();
+                if(this.n.isPlayer(newX,newY)){
+                    this.n.getPiege(newX,newY);
+                    this.setClearEnnemi(x,y);
+                    if(this.n.isPiege(newX,newY)){
+                        this.setEnnemiCoordonnees(this.n.getJoueur().getDefaultX(),this.n.getJoueur().getDefaultY(),e);
+                    }
+                    else
+                        this.setEnnemiCoordonnees(newX,newY,e);
+                }
+            }
+        }
+
     }
 
 
@@ -156,7 +207,6 @@ public class Deplacement {
         System.out.println(this.n);
         for(int i=0; i<x; i++){
             System.out.println(this.n.getJoueur());
-            this.n.getEnnemi().Test();
             if(this.n.isFinishPiece()){
                 clear();
                 break;
@@ -164,7 +214,8 @@ public class Deplacement {
             if(this.n.isFinishPiege()){
                 break;
             }
-            this.Movement(); 
+            this.joueurMovement();
+            this.ennemisMovement();
             clear();
             System.out.println("\n" + this.n);
         }
